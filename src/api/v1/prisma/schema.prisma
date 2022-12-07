@@ -9,17 +9,17 @@ datasource db {
 
 model clients {
   id                  Int                   @id @default(autoincrement())
-  name                String                @db.VarChar(30)
-  logo                String                @db.VarChar(60)
-  website             String                @db.VarChar(30)
-  email               String                @db.VarChar(30)
-  contact_no          String                @db.VarChar(30)
-  adress              String                @db.VarChar(30)
-  created_by          String                @db.VarChar(20)
-  updated_by          String                @db.VarChar(20)
+  name                String?               @db.VarChar(30)
+  logo                String?               @db.VarChar(60)
+  website             String?               @db.VarChar(30)
+  email               String?               @db.VarChar(30)
+  contact_no          String?               @db.VarChar(30)
+  adress              String?               @db.VarChar(30)
+  created_by          String?               @db.VarChar(20)
+  updated_by          String?               @db.VarChar(20)
   created_at          DateTime?             @db.Timestamp(0)
   updated_at          DateTime?             @db.Timestamp(0)
-  is_deleted          Boolean
+  is_deleted          Boolean?
   representative_info representative_info[]
 
   @@unique([id, website], map: "id")
@@ -29,18 +29,18 @@ model clients {
 
 model project {
   id                     Int                      @id @default(autoincrement())
-  name                   String                   @db.VarChar(30)
+  name                   String?                  @db.VarChar(30)
   description            String?                  @db.VarChar(1000)
   solution_id            Int?
-  sector_id              Int
+  sector_id              Int?
   representative_id      Int?
   vendor_id              Int?
-  created_by             String                   @db.VarChar(20)
-  updated_by             String                   @db.VarChar(20)
+  created_by             String?                  @db.VarChar(20)
+  updated_by             String?                  @db.VarChar(20)
   created_at             DateTime?                @db.Timestamp(0)
   updated_at             DateTime?                @db.Timestamp(0)
-  is_deleted             Boolean                  @default(false)
-  sector                 sector                   @relation(fields: [sector_id], references: [id], onDelete: Cascade, map: "Fk_project_sector")
+  is_deleted             Boolean?                 @default(false)
+  sector                 sector?                   @relation(fields: [sector_id], references: [id], onDelete: Cascade, map: "Fk_project_sector")
   representative_info    representative_info?     @relation(fields: [representative_id], references: [id], onDelete: Cascade, map: "project_ibfk_2")
   project_representative project_representative[]
   project_solution       project_solution[]
@@ -99,15 +99,15 @@ model representative_info {
   contact_1              String?                  @unique(map: "contact_1") @db.VarChar(45)
   contact_2              String?                  @unique(map: "contact_2") @db.VarChar(30)
   country                String?                  @db.VarChar(20)
-  created_by             String                   @db.VarChar(20)
-  updated_by             String                   @db.VarChar(20)
+  created_by             String?                  @db.VarChar(20)
+  updated_by             String?                  @db.VarChar(20)
   state                  String?                  @db.VarChar(20)
   client_or_vendor       Boolean?
   client_id              Int?
   vendor_id              Int?
   created_at             DateTime?                @db.Timestamp(0)
   updated_at             DateTime?                @db.Timestamp(0)
-  is_deleted             Boolean                  @default(false)
+  is_deleted             Boolean?                  @default(false)
   clients                clients?                 @relation(fields: [client_id], references: [id], onDelete: Cascade, map: "Fk_client_representatives")
   vendors                vendors?                 @relation(fields: [vendor_id], references: [id], onDelete: Cascade, map: "Fk_vendor_representatives")
   project                project[]
@@ -119,7 +119,7 @@ model representative_info {
 
 model sector {
   id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(30)
+  name       String?   @db.VarChar(30)
   created_by String    @db.VarChar(20)
   updated_by String    @db.VarChar(20)
   created_at DateTime? @db.Timestamp(0)

@@ -4,28 +4,24 @@ const { request } = require("express");
 
 const prisma = new PrismaClient();
 
-const createClient = asyncHandler(async (req, res) => {
+const createRepresentative = asyncHandler(async (req, res) => {
   try {
-    let { name, email, contact_no, address, website, logo } = req.body;
+    let { name, description } = req.body;
 
-    const client = await prisma.clients.create({
+    const representative = await prisma.representative_info.create({
       data: {
         name: name,
-        email: email,
-        contact_no: contact_no,
-        address: address,
-        website: website,
-        logo: logo,
+        description: description,
 
       },
     });
 
-    if (client) {
+    if (representative) {
       return res.status(201).json({
         success: true,
         status: 201,
-        message: "client created successfully!!!",
-        data: client,
+        message: "project created successfully!!!",
+        data: representative,
       });
     }
   } catch (error) {
@@ -36,15 +32,15 @@ const createClient = asyncHandler(async (req, res) => {
   }
 });
 
-const allClients = asyncHandler(async (req, res) => {
+const allRepresentatives = asyncHandler(async (req, res) => {
     try {
-      const client = await prisma.clients.findMany();
-      if (client) {
+      const representative = await prisma.representative_info.findMany();
+      if (project) {
         return res.status(201).json({
           success: true,
           status: 201,
-          message: `All Clients find successfully!!!`,
-          data: client,
+          message: `All Project find successfully!!!`,
+          data: representative,
         });
       }
     } catch (error) {
@@ -56,20 +52,20 @@ const allClients = asyncHandler(async (req, res) => {
   });
 
   
-const oneClient = asyncHandler(async (req, res) => {
+const oneRepresentative = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      const client = await prisma.clients.findUniqueOrThrow({
+      const representative = await prisma.representative_info.findUniqueOrThrow({
         where: {
           id: Number(id),
         },
       });
-      if (client) {
+      if (representative) {
         return res.status(201).json({
           success: true,
           status: 201,
-          message: `${client.name} find successfully!!!`,
-          data: client,
+          message: `${project.name} find successfully!!!`,
+          data: representative,
         });
       }
     } catch (error) {
@@ -82,9 +78,9 @@ const oneClient = asyncHandler(async (req, res) => {
   
 
 module.exports = {
-  createClient,
-  oneClient,
-  allClients,
+  createRepresentative,
+  oneRepresentative,
+  allRepresentatives,
 //   updateUser,
 //   deleteUser,
 };

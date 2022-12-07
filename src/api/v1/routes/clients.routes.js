@@ -1,24 +1,32 @@
 const express = require("express");
+// const connection = require("../connection");
 const clientRoute = express.Router();
 
-const {createClient} = require("../controllers/client.controller");
+const {
+  createClient,
+  allClients,
+  oneClient
+ 
+} = require("../controllers/client.controller");
 
 /**
  * @swagger
- * client/all-clients:
+ * user/all-users:
  *   get:
- *     summary: Retrieve a list of JSONPlaceholder clients.
- *     description: Retrieve a list of clients from JSONPlaceholder.
+ *     summary: Retrieve a list of JSONPlaceholder users.
+ *     description: Retrieve a list of users from JSONPlaceholder.
  */
-clientRoute.post("/create ", createClient);
-clientRoute.get("/all-clients", );
-clientRoute.get("/one-user/:id", );
-clientRoute.put("/update/:id", );
-clientRoute.delete("/delete/:id",);
+clientRoute.post("/create", createClient);
+clientRoute.get("/all-clients", allClients);
+clientRoute.get("/one-client/:id", oneClient);
 
-clientRoute.get("/test", (req, res) => {
+clientRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;
-  res.send("This is Client Test page");
+  res.send("<h1>This is clienttttttttt read page</h1>");
 });
 
 module.exports = clientRoute;
+
+
+
+// module.exports = clientRoute;
