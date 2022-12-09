@@ -4,11 +4,11 @@ const { request } = require("express");
 
 const prisma = new PrismaClient();
 
-const createSector = asyncHandler(async (req, res) => {
+const createSolution = asyncHandler(async (req, res) => {
   try {
     let { name, description } = req.body;
 
-    const sector = await prisma.sector.create({
+    const solution = await prisma.solutions.create({
       data: {
         name: name,
         description: description,
@@ -16,12 +16,12 @@ const createSector = asyncHandler(async (req, res) => {
       },
     });
 
-    if (sector) {
+    if (solution) {
       return res.status(201).json({
         success: true,
         status: 201,
-        message: "sector created successfully!!!",
-        data: sector,
+        message: "solution created successfully!!!",
+        data: solution,
       });
     }
   } catch (error) {
@@ -32,15 +32,15 @@ const createSector = asyncHandler(async (req, res) => {
   }
 });
 
-const allSectors = asyncHandler(async (req, res) => {
+const allSolutions = asyncHandler(async (req, res) => {
     try {
-      const sector = await prisma.sector.findMany();
-      if (sector) {
+      const solution = await prisma.solutions.findMany();
+      if (solution) {
         return res.status(201).json({
           success: true,
           status: 201,
-          message: `All sector find successfully!!!`,
-          data: sector,
+          message: `All solution find successfully!!!`,
+          data: solution,
         });
       }
     } catch (error) {
@@ -52,20 +52,20 @@ const allSectors = asyncHandler(async (req, res) => {
   });
 
   
-const oneSector = asyncHandler(async (req, res) => {
+const oneSolution = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      const sector = await prisma.sector.findUniqueOrThrow({
+      const solution = await prisma.solutions.findUniqueOrThrow({
         where: {
           id: Number(id),
         },
       });
-      if (sector) {
+      if (solution) {
         return res.status(201).json({
           success: true,
           status: 201,
-          message: `${sector.name} find successfully!!!`,
-          data: sector,
+          message: `${solution.name} find successfully!!!`,
+          data: solution,
         });
       }
     } catch (error) {
@@ -78,9 +78,9 @@ const oneSector = asyncHandler(async (req, res) => {
   
 
 module.exports = {
-  createSector,
-  oneSector,
-  allSectors,
+  createSolution,
+  oneSolution,
+  allSolutions,
 //   updateUser,
 //   deleteUser,
 };

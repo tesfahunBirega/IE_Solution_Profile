@@ -15,9 +15,9 @@ app.use("/user", require("./routes/users.routes"));
 app.use("/client", require("./routes/clients.routes"));
 app.use("/project", require("./routes/projects.routes"));
 app.use("/representative", require("./routes/representatives.routes"));
-// app.use("/sector", require("./routes/sectors.routes"));
-// app.use("/solution", require("./routes/solutions.routes"));
-// app.use("/vendor", require("./routes/vendors.routes"));
+app.use("/sector", require("./routes/sectors.routes"));
+app.use("/solution", require("./routes/solutions.routes"));
+app.use("/vendor", require("./routes/vendors.routes"));
 
 
 module.exports = app;

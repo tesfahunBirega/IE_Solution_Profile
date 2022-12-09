@@ -120,8 +120,8 @@ model representative_info {
 model sector {
   id         Int       @id @default(autoincrement())
   name       String?   @db.VarChar(30)
-  created_by String    @db.VarChar(20)
-  updated_by String    @db.VarChar(20)
+  created_by String?   @db.VarChar(20)
+  updated_by String?   @db.VarChar(20)
   created_at DateTime? @db.Timestamp(0)
   updated_at DateTime? @db.Timestamp(0)
   project    project[]
@@ -129,15 +129,15 @@ model sector {
 
 model solutions {
   id               Int                @id @default(autoincrement())
-  name             String             @db.VarChar(40)
+  name             String?            @db.VarChar(40)
   logo             String?            @db.VarChar(40)
   email            String?            @unique(map: "email") @db.VarChar(40)
   contact_no       String?            @db.VarChar(40)
-  created_by       String             @db.VarChar(20)
-  updated_by       String             @db.VarChar(20)
-  created_at       DateTime           @default(now()) @db.Timestamp(0)
+  created_by       String?             @db.VarChar(20)
+  updated_by       String?            @db.VarChar(20)
+  created_at       DateTime?           @default(now()) @db.Timestamp(0)
   updated_at       DateTime?          @db.Timestamp(0)
-  is_deleted       Boolean            @default(false)
+  is_deleted       Boolean?           @default(false)
   project_solution project_solution[]
 }
 
@@ -155,7 +155,7 @@ model users {
 
 model vendors {
   id                  Int                   @id @default(autoincrement())
-  name                String                @db.VarChar(45)
+  name                String?                @db.VarChar(45)
   logo                String?               @db.VarChar(45)
   website             String?               @unique(map: "website") @db.VarChar(45)
   email               String?               @unique(map: "email") @db.VarChar(30)
@@ -165,8 +165,8 @@ model vendors {
   state               String?               @db.VarChar(30)
   created_at          DateTime?             @db.Timestamp(0)
   update_at           DateTime?             @db.Timestamp(0)
-  created_by          String                @db.VarChar(30)
-  updated_by          String                @db.VarChar(30)
+  created_by          String?                @db.VarChar(30)
+  updated_by          String?                @db.VarChar(30)
   is_deleted          Boolean?              @default(false)
   project_vendor      project_vendor[]
   representative_info representative_info[]
