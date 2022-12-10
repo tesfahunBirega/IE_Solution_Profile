@@ -76,11 +76,55 @@ const oneRepresentative = asyncHandler(async (req, res) => {
     }
   });
   
-
+  const updateRepresentative = asyncHandler(async (req, res) => {
+    try {
+      const { id } = req.params;
+      let { name, email } = req.body;
+      const representative = await prisma.representative_info.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          name: name,
+          email: email
+        },
+      });
+      if (representative) {
+        return res.status(201).json({
+          success: true,
+          status: 201,
+          message: "representative updated successfully!!!",
+          data: representative,
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        error: error,
+        message: error.code,
+      });
+    }
+  });
+  
+  const deleteRepresentative = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const representative = await prisma.representative_info.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (representative) {
+      return res.status(201).json({
+        success: true,
+        status: 201,
+        message: `${representative.name} deleted successfully!!!`,
+        data: representative,
+      });
+    }
+  });
 module.exports = {
   createRepresentative,
   oneRepresentative,
   allRepresentatives,
-//   updateUser,
-//   deleteUser,
+  updateRepresentative,
+  deleteRepresentative,
 };

@@ -5,7 +5,9 @@ const representativeRoute = express.Router();
 const {
   createRepresentative,
   allRepresentatives,
-  oneRepresentative
+  oneRepresentative,
+  updateRepresentative,
+  deleteRepresentative
  
 } = require("../controllers/represntative.controller");
 
@@ -19,6 +21,8 @@ const {
  representativeRoute.post("/create", createRepresentative);
  representativeRoute.get("/all-projects", allRepresentatives);
  representativeRoute.get("/one-project/:id", oneRepresentative);
+ representativeRoute.put("/update/:id", updateRepresentative);
+ representativeRoute.delete("/delete/:id", deleteRepresentative);
 
  representativeRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;

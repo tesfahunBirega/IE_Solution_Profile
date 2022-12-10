@@ -5,7 +5,9 @@ const clientRoute = express.Router();
 const {
   createClient,
   allClients,
-  oneClient
+  oneClient,
+  updateClient,
+  deleteClient
  
 } = require("../controllers/client.controller");
 
@@ -19,6 +21,8 @@ const {
 clientRoute.post("/create", createClient);
 clientRoute.get("/all-clients", allClients);
 clientRoute.get("/one-client/:id", oneClient);
+clientRoute.put("/update/:id", updateClient);
+clientRoute.delete("/delete/:id", deleteClient);
 
 clientRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;

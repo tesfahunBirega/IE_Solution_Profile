@@ -5,7 +5,9 @@ const solutionRoute = express.Router();
 const {
   createSolution,
   oneSolution,
-  allSolutions
+  allSolutions,
+  updateSolution,
+  deleteSolution
  
 } = require("../controllers/solution.controller");
 
@@ -19,6 +21,8 @@ const {
  solutionRoute.post("/create", createSolution);
  solutionRoute.get("/all-projects", allSolutions);
  solutionRoute.get("/one-project/:id", oneSolution);
+ solutionRoute.put("/update/:id", updateSolution);
+ solutionRoute.delete("/delete/:id", deleteSolution);
 
  solutionRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;

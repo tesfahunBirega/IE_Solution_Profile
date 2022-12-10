@@ -5,7 +5,9 @@ const projectRoute = express.Router();
 const {
   createProject,
   allProjects,
-  oneProject
+  oneProject,
+  updateProject,
+  deleteProject
  
 } = require("../controllers/project.controller");
 
@@ -19,6 +21,8 @@ const {
 projectRoute.post("/create", createProject);
 projectRoute.get("/all-projects", allProjects);
 projectRoute.get("/one-project/:id", oneProject);
+projectRoute.put("/update/:id", updateProject);
+projectRoute.delete("/delete/:id", deleteProject);
 
 projectRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;

@@ -6,6 +6,8 @@ const {
   createVendor,
   allVendors,
   oneVendor,
+  updateVendor,
+  deleteVendor,
  
 } = require("../controllers/vendor.controller");
 
@@ -19,6 +21,8 @@ const {
  vendorRoute.post("/create", createVendor);
  vendorRoute.get("/all-projects", allVendors);
  vendorRoute.get("/one-project/:id", oneVendor);
+ vendorRoute.put("/update/:id", updateVendor);
+ vendorRoute.delete("/delete/:id", deleteVendor);
 
  vendorRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;

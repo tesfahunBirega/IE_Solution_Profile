@@ -76,11 +76,55 @@ const oneVendor = asyncHandler(async (req, res) => {
     }
   });
   
-
+  const updateVendor = asyncHandler(async (req, res) => {
+    try {
+      const { id } = req.params;
+      let { name, email } = req.body;
+      const vendor = await prisma.vendors.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          name: name,
+          email: email,
+        },
+      });
+      if (vendor) {
+        return res.status(201).json({
+          success: true,
+          status: 201,
+          message: "Vendor updated successfully!!!",
+          data: vendor,
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        error: error,
+        message: error.code,
+      });
+    }
+  });
+  
+  const deleteVendor = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const vendor = await prisma.vendors.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (vendor) {
+      return res.status(201).json({
+        success: true,
+        status: 201,
+        message: `${vendor.name} deleted successfully!!!`,
+        data: vendor,
+      });
+    }
+  });
 module.exports = {
   createVendor,
   oneVendor,
   allVendors,
-//   updateUser,
-//   deleteUser,
+  updateVendor,
+  deleteVendor,
 };

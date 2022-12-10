@@ -5,7 +5,9 @@ const sectorRoute = express.Router();
 const {
   createSector,
   allSectors,
-  oneSector
+  oneSector,
+  updateSector,
+  deleteSector
  
 } = require("../controllers/sector.controller");
 
@@ -19,6 +21,8 @@ const {
  sectorRoute.post("/create", createSector);
  sectorRoute.get("/all-projects", allSectors);
  sectorRoute.get("/one-project/:id", oneSector);
+ sectorRoute.put("/update/:id", updateSector);
+ sectorRoute.delete("/delete/:id", deleteSector);
 
  sectorRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;

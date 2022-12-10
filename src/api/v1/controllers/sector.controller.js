@@ -76,11 +76,55 @@ const oneSector = asyncHandler(async (req, res) => {
     }
   });
   
-
+  const updateSector = asyncHandler(async (req, res) => {
+    try {
+      const { id } = req.params;
+      let { name, email } = req.body;
+      const sector = await prisma.sector.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          name: name,
+          email: email,
+        },
+      });
+      if (sector) {
+        return res.status(201).json({
+          success: true,
+          status: 201,
+          message: "sector updated successfully!!!",
+          data: sector,
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        error: error,
+        message: error.code,
+      });
+    }
+  });
+  
+  const deleteSector = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const sector = await prisma.sector.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (sector) {
+      return res.status(201).json({
+        success: true,
+        status: 201,
+        message: `${sector.name} deleted successfully!!!`,
+        data: sector,
+      });
+    }
+  });
 module.exports = {
   createSector,
   oneSector,
   allSectors,
-//   updateUser,
-//   deleteUser,
+  updateSector,
+  deleteSector,
 };
