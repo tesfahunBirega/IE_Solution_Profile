@@ -6,13 +6,14 @@ const prisma = new PrismaClient();
 
 const createSolution = asyncHandler(async (req, res) => {
   try {
-    let { name, description } = req.body;
+    let {name, logo, email, contact_no  } = req.body;
 
     const solution = await prisma.solutions.create({
       data: {
         name: name,
-        description: description,
-
+        logo:logo,
+        email:email,
+        contact_no
       },
     });
 

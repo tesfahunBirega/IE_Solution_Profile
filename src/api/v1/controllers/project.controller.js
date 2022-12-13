@@ -116,7 +116,7 @@ const oneProject = asyncHandler(async (req, res) => {
       return res.status(201).json({
         success: true,
         status: 201,
-        message: `${user.name} deleted successfully!!!`,
+        message: `${project.name} deleted successfully!!!`,
         data: project,
       });
     }

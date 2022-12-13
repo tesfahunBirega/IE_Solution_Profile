@@ -18,6 +18,8 @@ app.use("/representative", require("./routes/representatives.routes"));
 app.use("/sector", require("./routes/sectors.routes"));
 app.use("/solution", require("./routes/solutions.routes"));
 app.use("/vendor", require("./routes/vendors.routes"));
+app.use("/project_representative", require("./routes/project_representative.routes"));
+
 
 
 module.exports = app;

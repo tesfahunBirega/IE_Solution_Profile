@@ -11,7 +11,7 @@ const createSector = asyncHandler(async (req, res) => {
     const sector = await prisma.sector.create({
       data: {
         name: name,
-        description: description,
+        // description: description,
 
       },
     });

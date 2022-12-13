@@ -12,12 +12,19 @@ const {
 
 /**
  * @swagger
+ * user/create:
+ *   post:
+ *     summary: create user.
+ *     description: create user.
+ */
+userRoute.post("/create", createUser);
+/**
+ * @swagger
  * user/all-users:
  *   get:
  *     summary: Retrieve a list of JSONPlaceholder users.
  *     description: Retrieve a list of users from JSONPlaceholder.
  */
-userRoute.post("/create", createUser);
 userRoute.get("/all-users", allUsers);
 userRoute.get("/one-user/:id", oneUser);
 userRoute.put("/update/:id", updateUser);

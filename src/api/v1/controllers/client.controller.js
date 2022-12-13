@@ -11,11 +11,11 @@ const createClient = asyncHandler(async (req, res) => {
     const client = await prisma.clients.create({
       data: {
         name: name,
+        logo: logo,
+        website: website,
         email: email,
         contact_no: contact_no,
         address: address,
-        website: website,
-        logo: logo,
 
       },
     });
