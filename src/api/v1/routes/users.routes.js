@@ -26,8 +26,29 @@ userRoute.post("/create", createUser);
  *     description: Retrieve a list of users from JSONPlaceholder.
  */
 userRoute.get("/all-users", allUsers);
+/**
+ * @swagger
+ * user/one-users:
+ *   get:
+ *     summary: Retrieve a user of JSONPlaceholder users.
+ *     description: Retrieve a user of users from JSONPlaceholder.
+ */
 userRoute.get("/one-user/:id", oneUser);
+/**
+ * @swagger
+ * user/update/:id:
+ *   put:
+ *     summary: update a user of JSONPlaceholder users.
+ *     description: update a user of users from JSONPlaceholder.
+ */
 userRoute.put("/update/:id", updateUser);
+/**
+ * @swagger
+ * user/delete/:id:
+ *   delete:
+ *     summary: delete a user of JSONPlaceholder users.
+ *     description: delete a user of users from JSONPlaceholder.
+ */
 userRoute.delete("/delete/:id", deleteUser);
 
 userRoute.get("/read", (req, res) => {

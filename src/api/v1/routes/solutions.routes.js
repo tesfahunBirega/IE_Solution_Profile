@@ -13,15 +13,43 @@ const {
 
 /**
  * @swagger
- * user/all-users:
- *   get:
- *     summary: Retrieve a list of JSONPlaceholder users.
- *     description: Retrieve a list of users from JSONPlaceholder.
+ * solution/create:
+ *   post:
+ *     summary: Create Solution.
+ *     description: Create Solution.
  */
  solutionRoute.post("/create", createSolution);
- solutionRoute.get("/all-projects", allSolutions);
- solutionRoute.get("/one-project/:id", oneSolution);
+ /**
+ * @swagger
+ * solution/all-solutions:
+ *   get:
+ *     summary: Retrieve a list of JSONPlaceholder solutions.
+ *     description: Retrieve a list of solutions from JSONPlaceholder.
+ */
+ solutionRoute.get("/all-solutions", allSolutions);
+  /**
+ * @swagger
+ * solution/one-solution:
+ *   get:
+ *     summary: Retrieve a list of JSONPlaceholder solutions.
+ *     description: Retrieve a list of solutions from JSONPlaceholder.
+ */
+ solutionRoute.get("/one-solution/:id", oneSolution);
+  /**
+ * @swagger
+ * solution/update/:id:
+ *   put:
+ *     summary: update a list of JSONPlaceholder solutions.
+ *     description: update a list of solutions from JSONPlaceholder.
+ */
  solutionRoute.put("/update/:id", updateSolution);
+   /**
+ * @swagger
+ * solution/delete/:id:
+ *   put:
+ *     summary: delete a list of JSONPlaceholder solutions.
+ *     description: delete a list of solutions from JSONPlaceholder.
+ */
  solutionRoute.delete("/delete/:id", deleteSolution);
 
  solutionRoute.get("/read", (req, res) => {

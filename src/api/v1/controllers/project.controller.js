@@ -6,17 +6,28 @@ const prisma = new PrismaClient();
 
 const createProject = asyncHandler(async (req, res) => {
   try {
-    let { name, description } = req.body;
+    let { name, description, representative_id } = req.body;
 
     const project = await prisma.project.create({
       data: {
         name: name,
-        description: description,
+        description: description
 
       },
     });
+    const _event = await prisma.representative_info.findUnique({ where: { id: representative_id},
+      data: {
+        events: {
+          connect: [{ id: _event.id }], // connect that member with the event ID
+        },
+      },
+     });
 
+    
     if (project) {
+      if(_event) {
+        res.status(200).send("ok")
+    }
       return res.status(201).json({
         success: true,
         status: 201,
