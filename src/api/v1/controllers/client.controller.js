@@ -125,10 +125,35 @@ const oneClient = asyncHandler(async (req, res) => {
       });
     }
   });
+  const findAllByClientId = asyncHandler(async (req, res) => {
+    try {
+      const { id } = req.params;
+      const client = await prisma.clients.findUniqueOrThrow({
+        where: {
+          id: Number(id),
+        },
+      });
+      if (client) {
+        return res.status(201).json({
+          success: true,
+          status: 201,
+          message: `${client.name} find successfully!!!`,
+          data: client,
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        error: error,
+        message: error.code,
+      });
+    }
+  });
+
 module.exports = {
   createClient,
   oneClient,
   allClients,
   updateClient,
   deleteClient,
+  findAllByClientId,
 };

@@ -61,10 +61,7 @@ const createUser = asyncHandler(async (req, res) => {
       data: {
         name: name,
         email: email,
-        gender:gender,
-        // departement:departement,
-        // job:job,
-        // password: password,
+        password: password,
       },
     });
 

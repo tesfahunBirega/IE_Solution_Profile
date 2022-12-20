@@ -7,14 +7,15 @@ const {
   allClients,
   oneClient,
   updateClient,
-  deleteClient
+  deleteClient,
+  findAllByClientId,
  
 } = require("../controllers/client.controller");
 
 /**
  * @swagger
  * client/create:
- *   get:
+ *   post:
  *     summary: create Client.
  *     description: Create Clients.
  */
@@ -35,6 +36,8 @@ clientRoute.get("/all-clients", allClients);
  *     description: Retrieve a client of clients from JSONPlaceholder.
  */
 clientRoute.get("/one-client/:id", oneClient);
+clientRoute.get("/project-client/:id", findAllByClientId);
+
 /**
  * @swagger
  * client/update/:id:
@@ -54,7 +57,7 @@ clientRoute.delete("/delete/:id", deleteClient);
 
 clientRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;
-  res.send("<h1>This is clienttttttttt read page</h1>");
+  res.send("<h1>This is clienttttt read page</h1>");
 });
 
 module.exports = clientRoute;

@@ -40,7 +40,7 @@ model project {
   created_at             DateTime?                @db.Timestamp(0)
   updated_at             DateTime?                @db.Timestamp(0)
   is_deleted             Boolean?                 @default(false)
-  sector                 sector?                   @relation(fields: [sector_id], references: [id], onDelete: Cascade, map: "Fk_project_sector")
+  sector                 sector?                  @relation(fields: [sector_id], references: [id], onDelete: Cascade, map: "Fk_project_sector")
   representative_info    representative_info?     @relation(fields: [representative_id], references: [id], onDelete: Cascade, map: "project_ibfk_2")
   project_representative project_representative[]
   project_solution       project_solution[]
@@ -107,7 +107,7 @@ model representative_info {
   vendor_id              Int?
   created_at             DateTime?                @db.Timestamp(0)
   updated_at             DateTime?                @db.Timestamp(0)
-  is_deleted             Boolean?                  @default(false)
+  is_deleted             Boolean?                 @default(false)
   clients                clients?                 @relation(fields: [client_id], references: [id], onDelete: Cascade, map: "Fk_client_representatives")
   vendors                vendors?                 @relation(fields: [vendor_id], references: [id], onDelete: Cascade, map: "Fk_vendor_representatives")
   project                project[]
@@ -133,29 +133,32 @@ model solutions {
   logo             String?            @db.VarChar(40)
   email            String?            @unique(map: "email") @db.VarChar(40)
   contact_no       String?            @db.VarChar(40)
-  created_by       String?             @db.VarChar(20)
+  created_by       String?            @db.VarChar(20)
   updated_by       String?            @db.VarChar(20)
-  created_at       DateTime?           @default(now()) @db.Timestamp(0)
+  created_at       DateTime?          @default(now()) @db.Timestamp(0)
   updated_at       DateTime?          @db.Timestamp(0)
   is_deleted       Boolean?           @default(false)
   project_solution project_solution[]
 }
 
 model users {
-  id         Int     @id @default(autoincrement())
-  name       String  @db.VarChar(30)
-  email      String  @db.VarChar(20)
-  password   String  @db.VarChar(20)
-  isAdmin    Boolean
-  created_at String  @db.VarChar(20)
-  updated_at String  @db.VarChar(20)
-  created_by String  @db.VarChar(20)
-  updated_by String  @db.VarChar(20)
+  id         Int      @id @default(autoincrement())
+  name       String?  @db.VarChar(30)
+  email      String?  @db.VarChar(20)
+  gender     String?  @db.VarChar(20)
+  department String?  @db.VarChar(20)
+  job        String?  @db.VarChar(20)
+  password   String?  @db.VarChar(20)
+  isAdmin    Boolean?
+  created_at String?  @db.VarChar(20)
+  updated_at String?  @db.VarChar(20)
+  created_by String?  @db.VarChar(20)
+  updated_by String?  @db.VarChar(20)
 }
 
 model vendors {
   id                  Int                   @id @default(autoincrement())
-  name                String?                @db.VarChar(45)
+  name                String?               @db.VarChar(45)
   logo                String?               @db.VarChar(45)
   website             String?               @unique(map: "website") @db.VarChar(45)
   email               String?               @unique(map: "email") @db.VarChar(30)
@@ -165,8 +168,8 @@ model vendors {
   state               String?               @db.VarChar(30)
   created_at          DateTime?             @db.Timestamp(0)
   update_at           DateTime?             @db.Timestamp(0)
-  created_by          String?                @db.VarChar(30)
-  updated_by          String?                @db.VarChar(30)
+  created_by          String?               @db.VarChar(30)
+  updated_by          String?               @db.VarChar(30)
   is_deleted          Boolean?              @default(false)
   project_vendor      project_vendor[]
   representative_info representative_info[]
