@@ -3,7 +3,7 @@ const app = require("./src/api/v1/index");
 //const app = require("./src/api/v2/index");
 const swaggerOptions = require("./src/config/swagger");
 
-const PORT = process.env.APP_PORT || 6000;
+const PORT = process.env.APP_PORT || 8000;
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsDocS = require("swagger-jsdoc");

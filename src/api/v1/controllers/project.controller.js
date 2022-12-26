@@ -6,22 +6,38 @@ const prisma = new PrismaClient();
 
 const createProject = asyncHandler(async (req, res) => {
   try {
-    let { name, description, solution_id, sector_id } = req.body;
+    let { name, description, sector_id, solution_id,representative_id } = req.body;
 
     const project = await prisma.project.create({
       data: {
         name: name,
         description: description,
         sector_id: sector_id,
-        // project_solution:{create:[{
+        representative_id: representative_id,
+        project_solution:{
+          create: [
+            {
+               solutions: {
+                    // name:solution_id,
+                    connect:{
+                      id:solution_id,        
+             },
+                      
+               },
+               created_by: "String",
+               updated_by: "String", 
+            }
+          ]
+        },
+        // project_solution: [{
         //   solution_id:1,
         //   project_id:2
 
-        //  } ]}
+        //  } ]
 
       }
   })
-
+console.log(project)
     if (project) {
       return res.status(201).json({
         success: true,
@@ -31,6 +47,7 @@ const createProject = asyncHandler(async (req, res) => {
       });
     }
   } catch (error) {
+   console.log(error);
     res.status(400).json({
       error: error,
       message: error.code,
@@ -40,7 +57,9 @@ const createProject = asyncHandler(async (req, res) => {
 
 const allProjects = asyncHandler(async (req, res) => {
   try {
-    const project = await prisma.project.findMany();
+    const project = await prisma.project.findMany({
+      skip:3
+    });
     if (project) {
       return res.status(201).json({
         success: true,
@@ -127,6 +146,8 @@ const deleteProject = asyncHandler(async (req, res) => {
     });
   }
 });
+  
+
 module.exports = {
   createProject,
   oneProject,

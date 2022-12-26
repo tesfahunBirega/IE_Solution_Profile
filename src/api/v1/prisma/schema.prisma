@@ -14,7 +14,7 @@ model clients {
   website             String?               @db.VarChar(30)
   email               String?               @db.VarChar(30)
   contact_no          String?               @db.VarChar(30)
-  adress              String?               @db.VarChar(30)
+  address              String?               @db.VarChar(30)
   created_by          String?               @db.VarChar(20)
   updated_by          String?               @db.VarChar(20)
   created_at          DateTime?             @db.Timestamp(0)
@@ -70,7 +70,7 @@ model project_solution {
   project_id  Int
   solution_id Int
   created_by  String    @db.VarChar(20)
-  updated_by  String    @db.VarChar(20)
+  updated_by  String   @db.VarChar(20)
   project     project   @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "Fk_project_solution")
   solutions   solutions @relation(fields: [solution_id], references: [id], onUpdate: Restrict, map: "Fk_project_solution1")
 
@@ -173,4 +173,26 @@ model vendors {
   is_deleted          Boolean?              @default(false)
   project_vendor      project_vendor[]
   representative_info representative_info[]
+}
+
+model projectt{
+id           Int            @id @unique @default(autoincrement())
+title        String         @db.VarChar(128)
+status       String         @db.VarChar(128)
+members      ProjecttUserss[]
+}
+
+model ProjecttUserss {
+id            Int     @id @unique @default(autoincrement())
+projectt          projectt?    @relation(fields: [projectt_id], references: [id])
+userss            Userss?    @relation(fields: [userss_id], references: [id])
+projectt_id        Int
+userss_id         Int
+}
+
+model Userss {
+  id     Int        @id @unique @default(autoincrement()) 
+  name   String      @db.VarChar(128)
+  password   String      @db.VarChar(128)
+  projectss  ProjecttUserss[]   
 }

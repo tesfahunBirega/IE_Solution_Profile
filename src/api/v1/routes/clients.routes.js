@@ -16,8 +16,12 @@ const {
  * @swagger
  * client/create:
  *   post:
- *     summary: create Client.
- *     description: Create Clients.
+ *     tag:
+ *         -cleintCreate
+ *            description: Retrieve a client of clients from JSONPlaceholder.
+ *     response:
+*            200:
+*            description:   App is up and running
  */
 clientRoute.post("/create", createClient);
 /**
@@ -41,7 +45,7 @@ clientRoute.get("/project-client/:id", findAllByClientId);
 /**
  * @swagger
  * client/update/:id:
- *   update:
+ *   put:
  *     summary: update a client of JSONPlaceholder clients.
  *     description: update a list of clients from JSONPlaceholder.
  */

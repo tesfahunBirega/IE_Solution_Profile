@@ -1,7 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require("@prisma/client");
 const { request } = require("express");
-
+const bcrypt = require("bcrypt");
+const registerRoute = require("../routes/registers.routes");
 const prisma = new PrismaClient();
 
 const allUsers = asyncHandler(async (req, res) => {
@@ -55,16 +56,16 @@ const oneUser = asyncHandler(async (req, res) => {
 
 const createUser = asyncHandler(async (req, res) => {
   try {
-    let { name, email, password } = req.body;
+    let { name, email, password, gender, department, job,} = req.body;
 
     const user = await prisma.users.create({
       data: {
         name: name,
         email: email,
         gender:gender,
-        // departement:departement,
-        // job:job,
-        // password: password,
+        department:department,
+        job:job,
+        password: password,
       },
     });
 
@@ -84,6 +85,56 @@ const createUser = asyncHandler(async (req, res) => {
   }
 });
 
+
+const createRegister = asyncHandler(async (req, res) => {
+  try {
+    
+    let { name, email, password, gender, department, job,} = req.body;
+    // if (!req.body) {
+    //   res.status(400).send({
+    //       message: "Content can not be empty!"
+    //   });
+    //   return;
+  // }
+    //remove any case sensetivity fron our email address
+    if (!req.body.name || !req.body.password) {
+      res.status(400).json({
+        error: 'Please provide username and password'
+      })
+    }
+    const toLowerCaseEmail = email.toLowerCase();
+
+    //hash the password
+    const hashpassword = await bcrypt.hashSync(
+      password,
+      10
+    )
+    const userss = await prisma.users.create({
+      data: {
+        name: name,
+        email: toLowerCaseEmail,
+        gender:gender,
+        department:department,
+        job:job,
+        password: hashpassword,
+      },
+    });
+
+    if (userss) {
+      return res.status(201).json({
+        success: true,
+        status: 201,
+        message: "User created successfully!!!",
+        data: userss,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      error: error,
+      message: error.code,
+    });
+  }
+});
 const updateUser = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
@@ -137,4 +188,5 @@ module.exports = {
   allUsers,
   updateUser,
   deleteUser,
+  createRegister,
 };

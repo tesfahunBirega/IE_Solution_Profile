@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require("@prisma/client");
 const { request } = require("express");
-
 const prisma = new PrismaClient();
 
 const createClient = asyncHandler(async (req, res) => {

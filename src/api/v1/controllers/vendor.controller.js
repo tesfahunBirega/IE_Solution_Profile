@@ -6,12 +6,17 @@ const prisma = new PrismaClient();
 
 const createVendor = asyncHandler(async (req, res) => {
   try {
-    let { name, description } = req.body;
+    let { name, logo, website, email, contact_phone, address, country  } = req.body;
 
     const vendor = await prisma.vendors.create({
       data: {
         name: name,
-        description: description,
+        logo:logo,
+        website:website,
+        email:email,
+        contact_phone:contact_phone,
+        address:address,
+        country:country,
 
       },
     });

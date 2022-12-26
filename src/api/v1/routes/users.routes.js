@@ -8,6 +8,7 @@ const {
   oneUser,
   updateUser,
   deleteUser,
+  createRegister,
 } = require("../controllers/user.controller");
 
 /**
@@ -18,6 +19,8 @@ const {
  *     description: create user.
  */
 userRoute.post("/create", createUser);
+userRoute.post("/register", createRegister);
+
 /**
  * @swagger
  * user/all-users:
