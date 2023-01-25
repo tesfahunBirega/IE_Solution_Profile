@@ -14,146 +14,142 @@ model clients {
   website             String?               @db.VarChar(30)
   email               String?               @db.VarChar(30)
   contact_no          String?               @db.VarChar(30)
-  address              String?               @db.VarChar(30)
-  created_by          String?               @db.VarChar(20)
-  updated_by          String?               @db.VarChar(20)
+  created_by          Int?
+  updated_by          Int?
   created_at          DateTime?             @db.Timestamp(0)
   updated_at          DateTime?             @db.Timestamp(0)
-  is_deleted          Boolean?
+  is_deleted          Boolean?              @default(false)
+  address_id          Int?
+  address             address?              @relation(fields: [address_id], references: [id], onDelete: Cascade, map: "Fk_client_address")
+  create              users?                @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_clients_user")
+  update              users?                @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_clients_user1")
   representative_info representative_info[]
 
   @@unique([id, website], map: "id")
   @@unique([id, email], map: "id_2")
   @@unique([id, contact_no], map: "id_3")
+  @@index([created_by], map: "Fk_clients_user")
+  @@index([updated_by], map: "Fk_clients_user1")
+  @@index([address_id], map: "Fk_client_address")
 }
 
 model project {
-  id                     Int                      @id @default(autoincrement())
-  name                   String?                  @db.VarChar(30)
-  description            String?                  @db.VarChar(1000)
-  solution_id            Int?
-  sector_id              Int?
-  representative_id      Int?
-  vendor_id              Int?
-  created_by             String?                  @db.VarChar(20)
-  updated_by             String?                  @db.VarChar(20)
-  created_at             DateTime?                @db.Timestamp(0)
-  updated_at             DateTime?                @db.Timestamp(0)
-  is_deleted             Boolean?                 @default(false)
-  sector                 sector?                  @relation(fields: [sector_id], references: [id], onDelete: Cascade, map: "Fk_project_sector")
-  representative_info    representative_info?     @relation(fields: [representative_id], references: [id], onDelete: Cascade, map: "project_ibfk_2")
-  project_representative project_representative[]
-  project_solution       project_solution[]
-  project_vendor         project_vendor[]
+  id                  Int                   @id @default(autoincrement())
+  name                String?               @db.VarChar(30)
+  description         String?               @db.VarChar(1000)
+  solution_id         Int?
+  representative_id   Int?
+  vendor_id           Int?
+  created_by          Int?
+  updated_by          Int?
+  created_at          DateTime?             @db.Timestamp(0)
+  updated_at          DateTime?             @db.Timestamp(0)
+  is_deleted          Boolean?              @default(false)
+  projectFill_id      Int?
+  projectFill         projectfill?          @relation("projectToprojectFill", fields: [projectFill_id], references: [id], onDelete: Cascade, map: "Fk_project_projectFill")
+  create              users?                @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_project_user")
+  update              users?                @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_project_user1")
+  representative_info representative_info[] @relation("projecttorepresentative_info")
+  solutions           solutions[]           @relation("projecttosolutions")
+  vendors             vendors[]             @relation("projecttovendors")
 
-  @@index([sector_id], map: "Fk_project_sector")
+  @@index([created_by], map: "Fk_clients_user")
+  @@index([updated_by], map: "Fk_clients_user1")
+  @@index([projectFill_id], map: "Fk_project_projectFill")
   @@index([representative_id], map: "representative_id")
   @@index([solution_id], map: "solution_id")
   @@index([vendor_id], map: "vendor_id")
 }
 
-model project_representative {
-  id                  Int                 @id @default(autoincrement())
-  project_id          Int
-  representative_id   Int
-  created_by          String              @db.VarChar(20)
-  updated_by          String              @db.VarChar(20)
-  project             project             @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "FK_project_representative")
-  representative_info representative_info @relation(fields: [representative_id], references: [id], onDelete: Cascade, map: "FK_project_representative1")
-
-  @@index([project_id], map: "FK_project_representative")
-  @@index([representative_id], map: "FK_project_representative1")
-}
-
-model project_solution {
-  id          Int       @id @default(autoincrement())
-  project_id  Int
-  solution_id Int
-  created_by  String    @db.VarChar(20)
-  updated_by  String   @db.VarChar(20)
-  project     project   @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "Fk_project_solution")
-  solutions   solutions @relation(fields: [solution_id], references: [id], onUpdate: Restrict, map: "Fk_project_solution1")
-
-  @@index([project_id], map: "Fk_project_solution")
-  @@index([solution_id], map: "Fk_project_solution1")
-}
-
-model project_vendor {
-  id         Int     @id @default(autoincrement())
-  project_id Int
-  vendor_id  Int
-  created_by Int
-  updated_by Int
-  project    project @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "FK_project_vendor")
-  vendors    vendors @relation(fields: [vendor_id], references: [id], onDelete: Cascade, map: "FK_project_vendor1")
-
-  @@index([project_id], map: "FK_project_vendor")
-  @@index([vendor_id], map: "FK_project_vendor1")
-}
-
 model representative_info {
-  id                     Int                      @id @default(autoincrement())
-  name                   String?                  @db.VarChar(45)
-  email                  String?                  @unique(map: "email") @db.VarChar(45)
-  address                String?                  @db.VarChar(45)
-  contact_1              String?                  @unique(map: "contact_1") @db.VarChar(45)
-  contact_2              String?                  @unique(map: "contact_2") @db.VarChar(30)
-  country                String?                  @db.VarChar(20)
-  created_by             String?                  @db.VarChar(20)
-  updated_by             String?                  @db.VarChar(20)
-  state                  String?                  @db.VarChar(20)
-  client_or_vendor       Boolean?
-  client_id              Int?
-  vendor_id              Int?
-  created_at             DateTime?                @db.Timestamp(0)
-  updated_at             DateTime?                @db.Timestamp(0)
-  is_deleted             Boolean?                 @default(false)
-  clients                clients?                 @relation(fields: [client_id], references: [id], onDelete: Cascade, map: "Fk_client_representatives")
-  vendors                vendors?                 @relation(fields: [vendor_id], references: [id], onDelete: Cascade, map: "Fk_vendor_representatives")
-  project                project[]
-  project_representative project_representative[]
+  id               Int       @id @default(autoincrement())
+  name             String?   @db.VarChar(45)
+  email            String?   @unique(map: "email") @db.VarChar(45)
+  contact_1        String?   @unique(map: "contact_1") @db.VarChar(45)
+  contact_2        String?   @unique(map: "contact_2") @db.VarChar(30)
+  created_by       Int?
+  updated_by       Int?
+  client_or_vendor Boolean?
+  client_id        Int?
+  vendor_id        Int?
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  is_deleted       Boolean?  @default(false)
+  address_id       Int?
+  clients          clients?  @relation(fields: [client_id], references: [id], onDelete: Cascade, map: "Fk_client_representatives")
+  address          address?  @relation(fields: [address_id], references: [id], onDelete: Cascade, map: "Fk_representative_info_address")
+  create           users?    @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_representatives_user")
+  update           users?    @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_representatives_user1")
+  vendors          vendors?  @relation(fields: [vendor_id], references: [id], onDelete: Cascade, map: "Fk_vendor_representatives")
+  project          project[] @relation("projecttorepresentative_info")
 
+  @@index([created_by], map: "Fk_representatives_user")
+  @@index([updated_by], map: "Fk_representatives_user1")
   @@index([client_id], map: "Fk_client_representatives")
   @@index([vendor_id], map: "Fk_vendor_representatives")
-}
-
-model sector {
-  id         Int       @id @default(autoincrement())
-  name       String?   @db.VarChar(30)
-  created_by String?   @db.VarChar(20)
-  updated_by String?   @db.VarChar(20)
-  created_at DateTime? @db.Timestamp(0)
-  updated_at DateTime? @db.Timestamp(0)
-  project    project[]
+  @@index([address_id], map: "Fk_representative_info_address")
 }
 
 model solutions {
-  id               Int                @id @default(autoincrement())
-  name             String?            @db.VarChar(40)
-  logo             String?            @db.VarChar(40)
-  email            String?            @unique(map: "email") @db.VarChar(40)
-  contact_no       String?            @db.VarChar(40)
-  created_by       String?            @db.VarChar(20)
-  updated_by       String?            @db.VarChar(20)
-  created_at       DateTime?          @default(now()) @db.Timestamp(0)
-  updated_at       DateTime?          @db.Timestamp(0)
-  is_deleted       Boolean?           @default(false)
-  project_solution project_solution[]
+  id          Int       @id @default(autoincrement())
+  name        String?   @db.VarChar(40)
+  logo        String?   @db.VarChar(40)
+  email       String?   @unique(map: "email") @db.VarChar(40)
+  contact_no  String?   @db.VarChar(40)
+  created_by  Int?
+  updated_by  Int?
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+  is_deleted  Boolean?  @default(false)
+  description String?   @db.VarChar(40)
+  create      users?    @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_solutions_user")
+  update      users?    @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_solutions_user1")
+  project     project[] @relation("projecttosolutions")
+
+  @@index([updated_by], map: "Fk_solutions_user1")
+  @@index([created_by], map: "Fk_solutions_user")
 }
 
 model users {
-  id         Int      @id @default(autoincrement())
-  name       String?  @db.VarChar(30)
-  email      String?  @db.VarChar(20)
-  gender     String?  @db.VarChar(20)
-  department String?  @db.VarChar(20)
-  job        String?  @db.VarChar(20)
-  password   String?  @db.VarChar(20)
-  isAdmin    Boolean?
-  created_at String?  @db.VarChar(20)
-  updated_at String?  @db.VarChar(20)
-  created_by String?  @db.VarChar(20)
-  updated_by String?  @db.VarChar(20)
+  id                                        Int                   @id @default(autoincrement())
+  email                                     String?               @unique @db.VarChar(20)
+  password                                  String?               @db.VarChar(20)
+  isAdmin                                   Boolean?
+  created_at                                String?               @db.VarChar(20)
+  updated_at                                String?               @db.VarChar(20)
+  created_by                                Int?
+  updated_by                                Int?
+  department                                String?               @db.VarChar(20)
+  firstName                                 String?               @db.VarChar(30)
+  gender                                    String?               @db.VarChar(20)
+  is_deleted                                Boolean?              @default(false)
+  lastName                                  String?               @db.VarChar(30)
+  tel                                       String?               @db.VarChar(20)
+  created_client                            clients[]             @relation("create")
+  updated_client                            clients[]             @relation("update")
+  created_project                           project[]             @relation("create")
+  updated_project                           project[]             @relation("update")
+  projectfill_projectfill_created_byTousers projectfill[]         @relation("projectfill_created_byTousers")
+  projectfill_projectfill_updated_byTousers projectfill[]         @relation("projectfill_updated_byTousers")
+  create_representative_info                representative_info[] @relation("create")
+  update_representative_info                representative_info[] @relation("update")
+  create_solutions                          solutions[]           @relation("create")
+  update_solutions                          solutions[]           @relation("update")
+  created_vendor                            vendors[]             @relation("create")
+  updated_vendor                            vendors[]             @relation("update")
+}
+
+model address {
+  id             Int                   @id @default(autoincrement())
+  country        String?               @db.VarChar(45)
+  city           String?               @db.VarChar(45)
+  postal_code    String?               @db.VarChar(45)
+  town           String?               @db.VarChar(45)
+  created_at     DateTime?             @db.Timestamp(0)
+  update_at      DateTime?             @db.Timestamp(0)
+  client         clients[]
+  representative representative_info[]
+  vendor         vendors[]
 }
 
 model vendors {
@@ -163,36 +159,36 @@ model vendors {
   website             String?               @unique(map: "website") @db.VarChar(45)
   email               String?               @unique(map: "email") @db.VarChar(30)
   contact_phone       String?               @unique(map: "contact_phone") @db.VarChar(30)
-  address             String?               @db.VarChar(30)
-  country             String?               @db.VarChar(20)
-  state               String?               @db.VarChar(30)
   created_at          DateTime?             @db.Timestamp(0)
   update_at           DateTime?             @db.Timestamp(0)
-  created_by          String?               @db.VarChar(30)
-  updated_by          String?               @db.VarChar(30)
+  created_by          Int?
+  updated_by          Int?
   is_deleted          Boolean?              @default(false)
-  project_vendor      project_vendor[]
+  address_id          Int?
+  address             address?              @relation(fields: [address_id], references: [id], onDelete: Cascade, map: "Fk_vendor_address")
+  create              users?                @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_vendors_user")
+  update              users?                @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_vendors_user1")
   representative_info representative_info[]
+  project             project[]             @relation("projecttovendors")
+
+  @@index([created_by], map: "Fk_vendors_user")
+  @@index([updated_by], map: "Fk_vendors_user1")
+  @@index([address_id], map: "Fk_vendor_address")
 }
 
-model projectt{
-id           Int            @id @unique @default(autoincrement())
-title        String         @db.VarChar(128)
-status       String         @db.VarChar(128)
-members      ProjecttUserss[]
-}
+model projectfill {
+  id                                  Int       @id @default(autoincrement())
+  name                                String?   @db.VarChar(30)
+  description                         String?   @db.VarChar(30)
+  created_by                          Int?
+  updated_by                          Int?
+  created_at                          DateTime? @db.Timestamp(0)
+  updated_at                          DateTime? @db.Timestamp(0)
+  is_deleted                          Boolean?  @default(false)
+  users_projectfill_created_byTousers users?    @relation("projectfill_created_byTousers", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_projectFill_user")
+  users_projectfill_updated_byTousers users?    @relation("projectfill_updated_byTousers", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_projectFill_user1")
+  project                             project[] @relation("projectToprojectFill")
 
-model ProjecttUserss {
-id            Int     @id @unique @default(autoincrement())
-projectt          projectt?    @relation(fields: [projectt_id], references: [id])
-userss            Userss?    @relation(fields: [userss_id], references: [id])
-projectt_id        Int
-userss_id         Int
-}
-
-model Userss {
-  id     Int        @id @unique @default(autoincrement()) 
-  name   String      @db.VarChar(128)
-  password   String      @db.VarChar(128)
-  projectss  ProjecttUserss[]   
+  @@index([created_by], map: "Fk_projectFill_user")
+  @@index([updated_by], map: "Fk_projectFill_user1")
 }

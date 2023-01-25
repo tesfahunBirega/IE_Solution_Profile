@@ -17,6 +17,7 @@ const createVendor = asyncHandler(async (req, res) => {
         contact_phone:contact_phone,
         address:address,
         country:country,
+        // created_by: req.authUser.id
 
       },
     });
@@ -39,7 +40,11 @@ const createVendor = asyncHandler(async (req, res) => {
 
 const allVendors = asyncHandler(async (req, res) => {
     try {
-      const vendor = await prisma.vendors.findMany();
+      const vendor = await prisma.vendors.findMany({
+        where: {
+          is_deleted: false
+        }
+      });
       if (vendor) {
         return res.status(201).json({
           success: true,
@@ -65,12 +70,18 @@ const oneVendor = asyncHandler(async (req, res) => {
           id: Number(id),
         },
       });
+      if(vendor?.is_deleted === true){
+        res.status(409).json({
+          success:false,
+          message: "Vendor Not Found"
+        })
+      }
       if (vendor) {
         return res.status(201).json({
           success: true,
           status: 201,
           message: `${vendor.name} find successfully!!!`,
-          data: solution,
+          data: vendor,
         });
       }
     } catch (error) {
@@ -94,6 +105,12 @@ const oneVendor = asyncHandler(async (req, res) => {
           email: email,
         },
       });
+      if(vendor?.is_deleted === true){
+        res.status(409).json({
+          success:false,
+          message: "Vendor Not Found"
+        })
+      }
       if (vendor) {
         return res.status(201).json({
           success: true,
@@ -112,19 +129,66 @@ const oneVendor = asyncHandler(async (req, res) => {
   
   const deleteVendor = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const vendor = await prisma.vendors.delete({
-      where: {
-        id: Number(id),
-      },
-    });
-    if (vendor) {
-      return res.status(201).json({
-        success: true,
-        status: 201,
-        message: `${vendor.name} deleted successfully!!!`,
-        data: vendor,
+
+    try {
+      const is_deleted = true
+    
+      const vendor = await prisma.vendors.findUniqueOrThrow({
+        where: {
+          id: Number(id),
+        },
       });
+      console.log(vendor?.is_deleted === true, "false")
+  
+      if (vendor?.is_deleted === true) {
+        res.status(400);
+        throw new Error("Vendor not found");
+  
+      }
+  
+      const deletevendor = await prisma.vendors.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          is_deleted: is_deleted
+        },
+      });
+  
+      if (deletevendor) {
+        res.status(201).json({
+          success: true,
+          message: `Vendor deleted successfully`
+        })
+      }
+      else {
+        res.status(400).json({
+          success: false,
+          message: "Something gose wrong please try again"
+        });
+      }
+  
+    } catch (error) {
+      res.status(400).json({
+        error: error,
+        message: error.code,
+      });
+  
+  
     }
+    // const vendor = await prisma.vendors.delete({
+    //   where: {
+    //     id: Number(id),
+    //   },
+    // });
+    // if (vendor) {
+    //   return res.status(201).json({
+    //     success: true,
+    //     status: 201,
+    //     message: `${vendor.name} deleted successfully!!!`,
+    //     data: vendor,
+    //   });
+    // }
   });
 module.exports = {
   createVendor,

@@ -1,0 +1,28 @@
+const { body, query, params  } = require("express-validator");
+
+/**@list_of_attributes for validation */
+const name = body("name").isString().withMessage("name is required.");
+const email = body("email")
+  .isEmail()
+  .withMessage("Please enter a valid email.");
+const password = body("password")
+  .isLength({
+    min: 8,
+    max: 16,
+  })
+  .withMessage("Please enter a password a minimum of 8 characters.");
+// const gender = body("gender").isString().withMessage("Gender is required.");
+//const logo = body("logo").isString().withMessage("logo is required.");
+const contact_no = body("contact_no").isString().withMessage("contact_no is required.");
+const address = body("address").isString().withMessage("address is required.");
+
+/**@create_user validation */
+const updateClientValidator = [name, email];
+const createClientValidation = [name, email, contact_no, address]
+
+
+
+module.exports  = {
+updateClientValidator,
+createClientValidation
+  };

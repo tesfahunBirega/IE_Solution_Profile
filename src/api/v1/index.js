@@ -11,19 +11,27 @@ app.get("/", (req, res) => {
   res.send("<h1>This is Advanced CRUD Home page</h1>");
 });
 
+
 app.use("/user", require("./routes/users.routes"));
 app.use("/client", require("./routes/clients.routes"));
 app.use("/project", require("./routes/projects.routes"));
 app.use("/representative", require("./routes/representatives.routes"));
-app.use("/sector", require("./routes/sectors.routes"));
+app.use("/projectFill", require("./routes/projectFill.routes"));
 app.use("/solution", require("./routes/solutions.routes"));
 app.use("/vendor", require("./routes/vendors.routes"));
-
-// app.use("/register", require("./routes/registers.routes"));
-
-// app.use("/register", require("./routes/registers.routes"));
-// app.use("/project_representative", require("./routes/project_representative.routes"));
+// app.use("/address", require("./routes/address.routes"))
 
 
 
 module.exports = app;
+
+// app.use((req, res, next) => {
+//   const error = Error('no route')
+//   next(error)
+// })
+
+// app.use((error, req, res, next) => {
+//   const code = error.code
+//   console.log(error.message);
+//   res.status(code).json({message: error.message, code: error.code})
+// })

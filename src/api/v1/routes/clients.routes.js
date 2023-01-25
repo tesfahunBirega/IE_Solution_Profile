@@ -1,6 +1,18 @@
 const express = require("express");
 // const connection = require("../connection");
 const clientRoute = express.Router();
+const multer = require("multer");
+const path = require('path');
+
+const storage = multer.diskStorage({
+  destination:"public/images",
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`)
+  }
+})
+
+const uploade = multer({storage})
+const { authMiddleware } = require("../middleware/authMiddleware")
 
 const {
   createClient,
@@ -8,56 +20,22 @@ const {
   oneClient,
   updateClient,
   deleteClient,
-  findAllByClientId,
+  // findAllByClientId,
  
 } = require("../controllers/client.controller");
+const { validationMiddleware } = require("../middleware/validationMiddleware")
+const { updateClientValidator,createClientValidation } = require("../validators/clientValidoter");
 
-/**
- * @swagger
- * client/create:
- *   post:
- *     tag:
- *         -cleintCreate
- *            description: Retrieve a client of clients from JSONPlaceholder.
- *     response:
-*            200:
-*            description:   App is up and running
- */
-clientRoute.post("/create", createClient);
-/**
- * @swagger
- * client/all-clients:
- *   get:
- *     summary: Retrieve a list of JSONPlaceholder clients.
- *     description: Retrieve a list of clients from JSONPlaceholder.
- */
-clientRoute.get("/all-clients", allClients);
-/**
- * @swagger
- * client/one-client:
- *   get:
- *     summary: Retrieve a client of JSONPlaceholder clients.
- *     description: Retrieve a client of clients from JSONPlaceholder.
- */
-clientRoute.get("/one-client/:id", oneClient);
-clientRoute.get("/project-client/:id", findAllByClientId);
+clientRoute.post("/create", uploade.single("logo"), createClientValidation, validationMiddleware, createClient);
 
-/**
- * @swagger
- * client/update/:id:
- *   put:
- *     summary: update a client of JSONPlaceholder clients.
- *     description: update a list of clients from JSONPlaceholder.
- */
-clientRoute.put("/update/:id", updateClient);
-/**
- * @swagger
- * client/delete/:id:
- *   delete:
- *     summary: delete a client of JSONPlaceholder clients.
- *     description: delete a list of clients from JSONPlaceholder.
- */
-clientRoute.delete("/delete/:id", deleteClient);
+clientRoute.get("/", allClients);
+
+clientRoute.get("/:id", oneClient);
+// clientRoute.get("/project-client/:id",authMiddleware, findAllByClientId);
+
+clientRoute.patch("/:id", updateClientValidator, validationMiddleware, updateClient);
+
+clientRoute.delete("/:id", deleteClient);
 
 clientRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;
