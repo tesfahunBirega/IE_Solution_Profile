@@ -5,45 +5,49 @@ const prisma = new PrismaClient();
 
 const createClient = asyncHandler(async (req, res) => {
   try {
-    let { name, email, contact_no, address, website, logo } = req.body;
-//     console.log(req, "laley kbel leyaley");
-// console.log(name);
-// const isExist = await prisma.clients.findUnique({
-//   where: {
-//     email: email
-//   }
-// })
-// console.log(isExist);
-// if(isExist){
-// res.status(409).json({
-//   success: false,
-//   message: "User already exist"
-// })
-// }
-//     else{
-      const client = await prisma.clients.create({
-      data: {
-        name: name,
-        logo: req.file.filename,
-        website: website,
-        email: email,
-        contact_no: contact_no,
-        // created_by:req.authUser.id
-      },
-    });
-    console.log(client);
+    let { name, email, contact_no, website, logo } = req.body;
 
-    if (client) {
-      return res.status(201).json({
-        success: true,
-        status: 201,
-        message: "client created successfully!!!",
-        data: client,
+    // const isExist = await prisma.clients.findUnique({
+    //   where: {
+    //     email: email
+    //   }
+    // })
+    // console.log(isExist)
+
+    // if (isExist) {
+    //   res.status(409).json({
+    //     success: false,
+    //     message: "Client already exist"
+    //   })
+
+    // }
+
+    // else {
+      const client = await prisma.clients.create({
+        data: {
+          name: name,
+          logo: req.file.filename,
+          website: website,
+          email: email,
+          contact_no: contact_no,
+          // created_by:req.authUser.id
+        },
       });
+      console.log(client)
+
+      if (client) {
+        return res.status(201).json({
+          success: true,
+          status: 201,
+          message: "Client created successfully!!!",
+          data: client,
+        });
+      // }
+      console.log(client)
+
     }
   } catch (error) {
-    console.log(error)
-    console.log(req)
+
     res.status(400).json({
       error: error,
       message: error.code,
@@ -86,11 +90,11 @@ const oneClient = asyncHandler(async (req, res) => {
     });
     if (client?.is_deleted === true) {
       res.status(409).json({
-        success:false,
-        message:"Client Not Found"
-        })
-      
-// console.log(client,"this is client")
+        success: false,
+        message: "Client Not Found"
+      })
+
+      // console.log(client,"this is client")
     }
     if (client?.is_deleted === false) {
       return res.status(201).json({
@@ -118,7 +122,8 @@ const updateClient = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     // console.log(req.authUser)
-    let { name, email, website,contact_no, address  } = req.body;
+    let { name, email, website, contact_no } = req.body;
+    console.log(name);
     const client = await prisma.clients.update({
       where: {
         id: Number(id),
@@ -126,14 +131,15 @@ const updateClient = asyncHandler(async (req, res) => {
       data: {
         name: name,
         email: email,
-        website:website,
-        contact_no:contact_no,
-        address:address
+        website: website,
+        contact_no: contact_no,
+        // address: address
+       logo:req.file.filename
         // updated_by:req.authUser.id
 
       },
     });
-    if(client?.is_deleted === true){
+    if (client?.is_deleted === true) {
       res.status(409).json({
         success: false,
         message: "Client Not Found"
@@ -160,7 +166,7 @@ const deleteClient = asyncHandler(async (req, res) => {
   // console.log(req, "request from client")
   try {
     const is_deleted = true
-  
+
     const client = await prisma.clients.findUniqueOrThrow({
       where: {
         id: Number(id),
@@ -169,10 +175,10 @@ const deleteClient = asyncHandler(async (req, res) => {
     console.log(client?.is_deleted === true, "false")
 
     if (client?.is_deleted === true) {
-     res.status(409).json({
-      success:false,
-      message:"Client Not Found"
-     })
+      res.status(409).json({
+        success: false,
+        message: "Client Not Found"
+      })
 
     }
 

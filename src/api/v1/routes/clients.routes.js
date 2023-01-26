@@ -4,8 +4,8 @@ const clientRoute = express.Router();
 const multer = require("multer");
 const path = require('path');
 
-const storage = multer.diskStorage({
-  destination:"public/images",
+ const storage = multer.diskStorage({
+  destination:"public",
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}_${file.originalname}`)
   }
@@ -33,7 +33,7 @@ clientRoute.get("/", allClients);
 clientRoute.get("/:id", oneClient);
 // clientRoute.get("/project-client/:id",authMiddleware, findAllByClientId);
 
-clientRoute.patch("/:id", updateClientValidator, validationMiddleware, updateClient);
+clientRoute.patch("/:id",uploade.single("logo"), updateClient);
 
 clientRoute.delete("/:id", deleteClient);
 

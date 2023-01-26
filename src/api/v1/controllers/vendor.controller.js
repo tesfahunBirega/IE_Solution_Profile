@@ -6,17 +6,17 @@ const prisma = new PrismaClient();
 
 const createVendor = asyncHandler(async (req, res) => {
   try {
-    let { name, logo, website, email, contact_phone, address, country  } = req.body;
+    let { name, website, email, contact_phone  } = req.body;
 
+    console.log(name, website, email, contact_phone)
     const vendor = await prisma.vendors.create({
       data: {
         name: name,
-        logo:logo,
+        logo:req.file.filename,
         website:website,
         email:email,
         contact_phone:contact_phone,
-        address:address,
-        country:country,
+       
         // created_by: req.authUser.id
 
       },

@@ -14,11 +14,11 @@ const password = body("password")
 // const gender = body("gender").isString().withMessage("Gender is required.");
 //const logo = body("logo").isString().withMessage("logo is required.");
 const contact_no = body("contact_no").isString().withMessage("contact_no is required.");
-const address = body("address").isString().withMessage("address is required.");
+// const address = body("address").isString().withMessage("address is required.");
 
 /**@create_user validation */
 const updateClientValidator = [name, email];
-const createClientValidation = [name, email, contact_no, address]
+const createClientValidation = [name, email, contact_no]
 
 
 
