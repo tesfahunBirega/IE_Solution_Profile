@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 
 const createAddress = asyncHandler(async(req, res) => {
 
-
     try{
         let{country,town,city,postal_code} = req.body;
 

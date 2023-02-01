@@ -14,8 +14,8 @@ console.log(name);
         email:email,
         contact_1:contact_1,
         contact_2:contact_2,
-        // client_id:client_id,
-        // vendor_id:vendor_id,
+        client_id:client_id,
+        vendor_id:vendor_id,
         // created_by:req.authUser.id
 
       },
@@ -40,8 +40,10 @@ console.log(representative);
 const allRepresentatives = asyncHandler(async (req, res) => {
     try {
       const representative = await prisma.representative_info.findMany({
-        where: {
-         is_deleted: false
+        select: {
+         is_deleted: false,
+         
+
         }
       });
       if (representative) {
