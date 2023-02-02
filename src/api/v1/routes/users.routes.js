@@ -9,25 +9,28 @@ const {
   oneUser,
   updateUser,
   deleteUser,
-  login
+  login,
+  authUser
 } = require("../controllers/user.controller");
 
-const { updateUserValidator,createUserValidation } = require("../validators/userValidetor");
+// const { updateUserValidator,createUserValidation } = require("../validators/userValidetor");
 
 const { authMiddleware } = require("../middleware/authMiddleware")
 
-userRoute.post("/create",createUser);
+const { updateUserValidator,createUserValidation } = require("../validators/userValidetor");
+userRoute.post("/create",createUserValidation,validationMiddleware,createUser);
 userRoute.post("/login", login);
 
 
 userRoute.get("/", allUsers);
+userRoute.get("/authUser", authMiddleware,authUser);
 
 userRoute.get("/:id", oneUser);
 
-userRoute.patch("/:id", updateUserValidator, validationMiddleware,  updateUser);
+userRoute.patch("/:id", authMiddleware,updateUserValidator, validationMiddleware,  updateUser);
 // userRoute.route("/update/:id").put(authMiddleware, CreateUserValidations, validationMiddleware,  updateUser);
 
-userRoute.delete("/:id", deleteUser);
+userRoute.delete("/:id", authMiddleware,deleteUser);
 
 userRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;

@@ -17,7 +17,7 @@ const job = body("job").isString().withMessage("job is required.");
 
 /**@create_user validation */
 const updateUserValidator = [email];
-const createUserValidation = [firstName,email,password,gender,department, job]
+const createUserValidation = [firstName,email,password,gender,department]
 
 
 

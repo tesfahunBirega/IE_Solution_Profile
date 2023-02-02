@@ -45,7 +45,16 @@ app.use(
   cors(corsOptions),
   require("./src/api/v1/routes/representatives.routes")
 );
-
+app.use(
+  "/api/v1/certeficate",
+  cors(corsOptions),
+  require("./src/api/v1/routes/certeficates.routes")
+);
+app.use(
+  "/api/v1/partner",
+  cors(corsOptions),
+  require("./src/api/v1/routes/partners.routes")
+);
 app.use(
   "/api/v1/projectFill",
   cors(corsOptions),

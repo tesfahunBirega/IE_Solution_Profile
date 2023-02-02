@@ -12,10 +12,11 @@ const createSolution = asyncHandler(async (req, res) => {
       data: {
         name: name,
         description: description,
-        // logo:logo,
-        email:email,
-        contact_no:contact_no,
-        // created_by:req.authUser.id
+        logo:req.file.filename,
+        // email:email,
+        // contact_no:contact_no,
+        created_by:req.authUser.id,
+        created_at:new Date()
       },
     });
 console.log(solution);
@@ -92,17 +93,22 @@ const oneSolution = asyncHandler(async (req, res) => {
   const updateSolution = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      let { name, email } = req.body;
+      let { name, description } = req.body;
+      console.log(name,description);
       const solution = await prisma.solutions.update({
         where: {
           id: Number(id),
         },
         data: {
           name: name,
-          email: email,
-          // updated_by:req.authUser.id
+          description: description,
+          logo:req.file.filename,
+          updated_by:req.authUser.id,
+          updated_at:new Date()
+          
         },
       });
+      console.log(solution);
       if(solution?.is_deleted === true){
         res.status(409).json({
           success:false,

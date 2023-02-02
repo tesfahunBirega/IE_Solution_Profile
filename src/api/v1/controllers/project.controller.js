@@ -17,7 +17,7 @@ const createProject = asyncHandler(async (req, res) => {
       }
       solutionss.push(obj)
     })
-    console.log(typeof(solutions))
+    // console.log(typeof(solutions))
 
     representative_infos = []
 
@@ -27,7 +27,7 @@ const createProject = asyncHandler(async (req, res) => {
       }
       representative_infos.push(obj)
     })
-    console.log(typeof(representative_info))
+    // console.log(typeof(representative_info))
 
     vendorss = []
 
@@ -37,13 +37,15 @@ const createProject = asyncHandler(async (req, res) => {
       }
       vendorss.push(obj)
     })
-    console.log(typeof(vendors))
+    // console.log(typeof(vendors))
     const project = await prisma.project.create({
       data: {
         name: name,
         description: description,
-        // created_by:req.authUser.id,
+        created_by:req.authUser.id,
         projectFill_id: projectfill_id,
+        created_by:req.authUser.id,
+          created_at:new Date(),
         // representative_id: representative_id,
         solutions:{
           connect: solutionss
@@ -64,7 +66,7 @@ const createProject = asyncHandler(async (req, res) => {
 
       }
   })
-  console.log(project)
+  // console.log(project)
   if (project) {
       return res.status(201).json({
         success: true,
@@ -75,7 +77,7 @@ const createProject = asyncHandler(async (req, res) => {
       });
     }
   } catch (error) {
-   console.log(error);
+  //  console.log(error);
     res.status(400).json({
       error: error,
       message: error.code,
@@ -87,10 +89,20 @@ const allProjects = asyncHandler(async (req, res) => {
   try {
     const project = await prisma.project.findMany({
       select: {
+        id:true,
+        // logo:true
+        // website:true,
+        // email:true,
+        // contact_phonetrue:true,
+        name:true,
+        description:true,
         is_deleted: false,
+        solutions:true,
+        vendors:true
+
       }
     });
-    
+    // console.log(project);
     if (project) {
       return res.status(201).json({
         success: true,
@@ -111,15 +123,24 @@ const allProjects = asyncHandler(async (req, res) => {
 const oneProject = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
-    const project = await prisma.project.findUniqueOrThrow({
+    const project = await prisma.project.findFirst({
       where: {
-        id: Number(id),
+        id:Number(id),
       },
+      select: {
+        id:true,
+        name:true,
+        description:true,
+        is_deleted:false,
+        solutions:true,
+        vendors:true
+      }
     });
+    // console.log(project?.is_deleted === true);
     if(project?.is_deleted === true){
       res.status(409).json({
         success:false,
-        message: "Project already exist"
+        message: "Project Not Found"
       })
     }
     if (project) {
@@ -149,6 +170,7 @@ const updateProject = asyncHandler(async (req, res) => {
       data: {
         name: name,
         updated_by:req.authUser.id,
+        updated_at:new Data()
 
       },
     });
@@ -183,7 +205,7 @@ try{
 id: Number(id)
     },
   });
-  console.log(project?.is_deleted === true, "false")
+  // console.log(project?.is_deleted === true, "false")
 
 if(project?.is_deleted === true){
   res.status(400).json({

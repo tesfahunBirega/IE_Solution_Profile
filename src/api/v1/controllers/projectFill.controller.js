@@ -13,13 +13,14 @@ const createProjectFill = asyncHandler(async (req, res) => {
         name: name,
         description:description,
         // updated_by:updated_by,
-        // created_by:req.authUser.id
+        created_by:req.authUser.id,
+        created_at:new Date()
 
 
       }, 
 
     });
-console.log(projectFill)
+// console.log(projectFill)
     if (projectFill) {
       return res.status(201).json({
         success: true,
@@ -101,7 +102,8 @@ const oneProjectFill = asyncHandler(async (req, res) => {
         data: {
           name: name,
           email: email,
-          // updated_by: req.authUser.id
+          updated_by: req.authUser.id,
+          created_at:new Date()
         },
       });
       if(projectFill?.isdeleted === true){

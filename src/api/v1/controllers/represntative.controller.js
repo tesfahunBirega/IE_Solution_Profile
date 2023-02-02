@@ -16,7 +16,8 @@ console.log(name);
         contact_2:contact_2,
         client_id:client_id,
         vendor_id:vendor_id,
-        // created_by:req.authUser.id
+        created_by:req.authUser.id,
+        created_at:new Date()
 
       },
     });
@@ -41,11 +42,19 @@ const allRepresentatives = asyncHandler(async (req, res) => {
     try {
       const representative = await prisma.representative_info.findMany({
         select: {
-         is_deleted: false,
-         
-
+          id:true,
+          name:true,
+          email:true,
+          contact_1:true,
+          contact_2:true,
+          vendors:true,
+          clients:true
+        },
+        where:{
+            is_deleted:false
         }
       });
+      // console.log(representative);
       if (representative) {
         return res.status(201).json({
           success: true,
@@ -104,7 +113,8 @@ const oneRepresentative = asyncHandler(async (req, res) => {
         data: {
           name: name,
           email: email,
-          // updated_by:req.authUser.id
+          updated_by:req.authUser.id,
+          updated_at:new Date()
 
         },
       });

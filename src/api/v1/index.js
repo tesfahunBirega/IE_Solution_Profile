@@ -8,7 +8,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("<h1>This is Advanced CRUD Home page</h1>");
+  res.send("<h1>This is IE Solutio Profile Home page</h1>");
 });
 
 
@@ -19,6 +19,12 @@ app.use("/representative", require("./routes/representatives.routes"));
 app.use("/projectFill", require("./routes/projectFill.routes"));
 app.use("/solution", require("./routes/solutions.routes"));
 app.use("/vendor", require("./routes/vendors.routes"));
+app.use("/certeficate", require("./routes/certeficates.routes"));
+app.use("/partner", require("./routes/partners.routes"));
+
+// app.use("/partner", require("./routes/partners.routes"));
+
+
 // app.use("/address", require("./routes/address.routes"))
 
 

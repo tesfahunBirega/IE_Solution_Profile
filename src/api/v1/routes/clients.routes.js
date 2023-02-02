@@ -1,6 +1,7 @@
 const express = require("express");
 // const connection = require("../connection");
 const clientRoute = express.Router();
+
 const multer = require("multer");
 const path = require('path');
 
@@ -20,22 +21,20 @@ const {
   oneClient,
   updateClient,
   deleteClient,
-  // findAllByClientId,
  
 } = require("../controllers/client.controller");
 const { validationMiddleware } = require("../middleware/validationMiddleware")
 const { updateClientValidator,createClientValidation } = require("../validators/clientValidoter");
 
-clientRoute.post("/create", uploade.single("logo"), createClientValidation, validationMiddleware, createClient);
+clientRoute.post("/create", uploade.single("logo"),authMiddleware, createClientValidation, validationMiddleware, createClient);
 
-clientRoute.get("/", allClients);
+clientRoute.get("/",allClients);
 
 clientRoute.get("/:id", oneClient);
-// clientRoute.get("/project-client/:id",authMiddleware, findAllByClientId);
 
-clientRoute.patch("/:id",uploade.single("logo"), updateClient);
+clientRoute.patch("/:id",uploade.single("logo"), authMiddleware,updateClient);
 
-clientRoute.delete("/:id", deleteClient);
+clientRoute.delete("/:id",authMiddleware,deleteClient);
 
 clientRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;
@@ -46,4 +45,3 @@ module.exports = clientRoute;
 
 
 
-// module.exports = clientRoute;

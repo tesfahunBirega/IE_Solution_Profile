@@ -16,12 +16,12 @@ const {
 const { validationMiddleware } = require("../middleware/validationMiddleware")
 const { updateSectorValidator,createSectorValidation } = require("../validators/projectFillValidor");
 
-projectFillRoute.post("/create", createSectorValidation, validationMiddleware, createProjectFill);
+projectFillRoute.post("/create", authMiddleware,createSectorValidation, validationMiddleware, createProjectFill);
 
-projectFillRoute.get("/", allProjectFill);
+projectFillRoute.get("/",allProjectFill);
 projectFillRoute.get("/:id", oneProjectFill);
-projectFillRoute.patch("/:id", updateSectorValidator, updateSectorValidator,updateProjectFill);
-projectFillRoute.delete("/:id" , deleteProjectFill);
+projectFillRoute.patch("/:id", authMiddleware,updateSectorValidator, validationMiddleware,updateProjectFill);
+projectFillRoute.delete("/:id",authMiddleware, deleteProjectFill);
 
 projectFillRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;

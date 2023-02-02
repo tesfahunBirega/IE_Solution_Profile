@@ -14,15 +14,15 @@ const {
  
 } = require("../controllers/project.controller");
 
-projectRoute.post("/create",createProjectValidation,validationMiddleware, createProject);
+projectRoute.post("/create",authMiddleware,createProjectValidation,validationMiddleware, createProject);
 
 projectRoute.get("/", allProjects);
 
 projectRoute.get("/:id", oneProject);
 
-projectRoute.patch("/:id", updateProjectValidator, validationMiddleware,updateProject);
+projectRoute.patch("/:id",authMiddleware, updateProjectValidator, validationMiddleware,updateProject);
 
-projectRoute.delete("/:id", deleteProject);
+projectRoute.delete("/:id",authMiddleware, deleteProject);
 
 projectRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;

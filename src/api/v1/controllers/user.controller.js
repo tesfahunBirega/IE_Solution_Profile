@@ -1,42 +1,13 @@
 const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require("@prisma/client");
 const { request } = require("express");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs");
 // const registerRoute = require("../routes/registers.routes");
 const prisma = new PrismaClient();
 
 const jwt = require("jsonwebtoken");
 const SECRET = "SECRETFORTOKEN"
-
-
-
-// const signup = asyncHandler(async(req,res)=>{
-// const {name,email, gender,department} = req.body
-
-// const isExist = await prisma.users.findUnique( { where: {
-//   eamil: email,
-// }})
-// if(isExist){
-//   res.status(409).json({
-//     success:false,
-//     message:"User alredy exist"
-//   })
-// } else {
-//   const user = await prisma.users.create({
-//     data: {
-//       name: name,
-//       email: email,
-//       gender:gender,
-//       department:department,
-//       job:job,
-//       password: password,
-//     },
-//   });
-
-// } 
-
-
-
 
 
 // })
@@ -50,6 +21,10 @@ const isExist = await prisma.users.findUnique( {
   where: {
   email: email,
 }})
+
+const salt = await bcrypt.genSalt(10)
+const hash = await bcrypt.hash(password, salt)
+
 console.log(isExist);
     if(isExist){
         res.status(409).json({
@@ -65,8 +40,9 @@ console.log(isExist);
         gender:gender,
         department:department,
         tel:tel,
-        password: password,
-        // created_by: req.authUser.id
+        password: hash,
+        created_by: req.authUser.id,
+        created_at:new Date()
       },
     });
 console.log(user);
@@ -111,8 +87,8 @@ const allUsers = asyncHandler(async (req, res) => {
 });
 const login = asyncHandler(async (req, res) => {
   let { email, password } = req.body;
-  console.log(email)
-  console.log(password)
+  // console.log(email)
+  // console.log(password)
 
   try {
     const user = await prisma.users.findFirst({
@@ -121,6 +97,16 @@ const login = asyncHandler(async (req, res) => {
       },
     });
   console.log(user)
+
+
+//   const isMatch =  bcrypt.compare(password, user.password)
+//   isMatch.then((value)=>{
+//     console.log(value, "value")
+//     console.log(password, "input");
+// console.log(user.password, "database");
+//   }).catch((err)=>{
+//     console.log(err,value)
+//   })
 
     /**@check if user exists*/
     if (!user) {
@@ -135,14 +121,11 @@ const login = asyncHandler(async (req, res) => {
         email: user.email,
       };
       console.log(user, "is user")
-      if (user && 
-        // (await bcrypt.compare(password, user.password))
-        (password=== user.password)
-        ) {
+      if (user) {
         res.status(200).json({
           success: true,
           data: userInfo,
-          // accessToken: generateToken(user),
+          accessToken: generateToken(user),
           message: "You are logged in successfully!!!",
         });
       } else {
@@ -199,55 +182,7 @@ const oneUser = asyncHandler(async (req, res) => {
 
 
 
-// const createRegister = asyncHandler(async (req, res) => {
-//   try {
-    
-//     let { name, email, password, gender, department, job,} = req.body;
-//     // if (!req.body) {
-//     //   res.status(400).send({
-//     //       message: "Content can not be empty!"
-//     //   });
-//     //   return;
-//   // }
-//     //remove any case sensetivity fron our email address
-//     if (!req.body.name || !req.body.password) {
-//       res.status(400).json({
-//         error: 'Please provide username and password'
-//       })
-//     }
-//     const toLowerCaseEmail = email.toLowerCase();
 
-//     //hash the password
-//     const hashpassword = await bcrypt.hashSync(
-//       password,
-//       10
-//     )
-//     const userss = await prisma.users.create({
-//       data: {
-//         name: name,
-//         email: toLowerCaseEmail,
-//         gender:gender,
-//         department:department,
-//         job:job,
-//         password: hashpassword,
-//       },
-//     });
-
-//     if (userss) {
-//       return res.status(201).json({
-//         success: true,
-//         status: 201,
-//         message: "User created successfully!!!",
-//         data: userss,
-//       });
-//     }
-//   } catch (error) {
-//     res.status(400).json({
-//       error: error,
-//       message: error.code,
-//     });
-//   }
-// });
 const updateUser = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
@@ -261,6 +196,8 @@ const updateUser = asyncHandler(async (req, res) => {
       data: {
         // lastName: lastName,
         email: email,
+        update_by:req.authUser.id,
+        updated_at:new Date()
       },
     });
     console.log(user?.is_deleted === true, "false");
@@ -361,12 +298,50 @@ const generateToken = (id) => {
 };
 
 
+const authUser= asyncHandler(async(req,res)=>{
+
+  try {
+    const id = req.authUser.id;
+console.log(id);
+    const authorizedUser = 
+     await prisma.users.findUniqueOrThrow({
+      where: {
+        id: Number(id),
+      },
+     
+    });
+// if(authorizedUser?.is_deleted === true){
+//   res.status(409).json({
+// success:false,
+// message:"User Not Found"
+//   })
+// }
+
+    if (authorizedUser) {
+      return res.status(201).json({
+        success: true,
+        status: 201,
+        message: "Authorized user data",
+        data: authorizedUser,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      error: error,
+      message: error.code,
+    });
+  }
+
+
+})
+
 module.exports = {
   createUser,
   oneUser,
   allUsers,
   updateUser,
   deleteUser,
-  login
+  login,
+  authUser
   // createRegister,
 };

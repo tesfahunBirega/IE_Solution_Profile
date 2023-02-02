@@ -8,7 +8,8 @@ const createVendor = asyncHandler(async (req, res) => {
   try {
     let { name, website, email, contact_phone  } = req.body;
 
-    console.log(name, website, email, contact_phone)
+console.log(name,website,email,contact_phone);
+
     const vendor = await prisma.vendors.create({
       data: {
         name: name,
@@ -16,8 +17,8 @@ const createVendor = asyncHandler(async (req, res) => {
         website:website,
         email:email,
         contact_phone:contact_phone,
-       
-        // created_by: req.authUser.id
+        created_by: req.authUser.id,
+        created_at:new Date()
 
       },
     });
@@ -41,6 +42,9 @@ const createVendor = asyncHandler(async (req, res) => {
 const allVendors = asyncHandler(async (req, res) => {
     try {
       const vendor = await prisma.vendors.findMany({
+        include:{
+          representative_info:true
+        },
         where: {
           is_deleted: false
         }
@@ -70,12 +74,15 @@ const oneVendor = asyncHandler(async (req, res) => {
           id: Number(id),
         },
       });
+      console.log(vendor);
+
       if(vendor?.is_deleted === true){
         res.status(409).json({
           success:false,
           message: "Vendor Not Found"
         })
       }
+      console.log(vendor);
       if (vendor) {
         return res.status(201).json({
           success: true,
@@ -95,7 +102,7 @@ const oneVendor = asyncHandler(async (req, res) => {
   const updateVendor = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      let { name, email } = req.body;
+      let { name, email,contact_phone,website } = req.body;
       const vendor = await prisma.vendors.update({
         where: {
           id: Number(id),
@@ -103,6 +110,11 @@ const oneVendor = asyncHandler(async (req, res) => {
         data: {
           name: name,
           email: email,
+          contact_phone:contact_phone,
+          website:website,
+          logo:req.file.filename,
+          updated_by_by:req.authUser.id,
+          updated_at:new Date()
         },
       });
       if(vendor?.is_deleted === true){

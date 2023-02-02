@@ -28,11 +28,11 @@ const {
   deleteVendor,
  
 } = require("../controllers/vendor.controller");
- vendorRoute.post("/create", uploade.single("logo"), createVendor);
- vendorRoute.get("/", allVendors);
+ vendorRoute.post("/create",authMiddleware,uploade.single("logo"),createVendorValidation,validationMiddleware, uploade.single("logo"), createVendor);
+ vendorRoute.get("/",allVendors);
  vendorRoute.get("/:id", oneVendor);
- vendorRoute.patch("/:id", updateVendorValidator, validationMiddleware,updateVendor);
- vendorRoute.delete("/:id", deleteVendor);
+ vendorRoute.patch("/:id",authMiddleware,uploade.single("logo"),updateVendorValidator, validationMiddleware,updateVendor);
+ vendorRoute.delete("/:id",authMiddleware, deleteVendor);
  vendorRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;
   res.send("<h1>This is Vendorsssssssssssss read page</h1>");

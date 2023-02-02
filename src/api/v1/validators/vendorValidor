@@ -1,7 +1,7 @@
 const { body, query, params  } = require("express-validator");
 
 /**@list_of_attributes for validation */
-const name = body("name").isString().withMessage("Name is required.");
+const name = body("name").isString().withMessage("name is required.");
 const email = body("email")
   .isEmail()
   .withMessage("Please enter a valid email.");
@@ -11,13 +11,11 @@ const password = body("password")
     max: 16,
   })
   .withMessage("Please enter a password a minimum of 8 characters.");
-const gender = body("gender").isString().withMessage("Gender is required.");
-const log = body("log").isString().withMessage("log is required.");
 const contact_phone = body("contact_phone").isString().withMessage("contact_phone is required.");
 
 /**@create_user validation */
 const updateVendorValidator = [name, email];
-const createVendorValidation = [name,email,gender,log, contact_phone]
+const createVendorValidation = [name,email, contact_phone]
 
 
 
