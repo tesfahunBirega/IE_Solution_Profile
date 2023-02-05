@@ -14,6 +14,7 @@ const SECRET = "SECRETFORTOKEN"
 
 const createUser = asyncHandler(async (req, res) => {
   try {
+    const password1 = 12345678
     let {email, password, firstName, lastName, gender, department, tel,} = req.body;
     console.log(password);
 /**@check if User Email exists*/
@@ -22,8 +23,8 @@ const isExist = await prisma.users.findUnique( {
   email: email,
 }})
 
-const salt = await bcrypt.genSalt(10)
-const hash = await bcrypt.hash(password, salt)
+// const salt = await bcrypt.genSalt(10)
+// const hash = await bcrypt.hash(password, salt)
 
 console.log(isExist);
     if(isExist){
@@ -32,6 +33,8 @@ console.log(isExist);
     message:"User already exist"
   })
     }else{
+      const salt = await bcrypt.genSalt(10)
+const hash = await bcrypt.hash(password, salt)
     const user = await prisma.users.create({
       data: {
         firstName:firstName,
@@ -45,6 +48,8 @@ console.log(isExist);
         created_at:new Date()
       },
     });
+const isMatch =  bcrypt.compare(hash,password1)
+console.log(isMatch);
 console.log(user);
     if (user) {
       return res.status(201).json({

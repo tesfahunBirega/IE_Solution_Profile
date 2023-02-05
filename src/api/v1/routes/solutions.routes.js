@@ -29,8 +29,8 @@ const {
  solutionRoute.post("/create",uploade.single("logo"),authMiddleware,createSolution);
  solutionRoute.get("/", allSolutions);
  solutionRoute.get("/:id", oneSolution);
- solutionRoute.patch("/:id",authMiddleware,updateSolution);
- solutionRoute.delete("/:id",uploade.single("logo"),authMiddleware, deleteSolution);
+ solutionRoute.patch("/:id",uploade.single("logo"),authMiddleware,updateSolution);
+ solutionRoute.delete("/:id",authMiddleware, deleteSolution);
  solutionRoute.get("/read", (req, res) => {
   const baseUrl = req.baseUrl;
   res.send("<h1>This is solutionsssssssssssss read page</h1>");

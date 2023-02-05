@@ -44,8 +44,12 @@ const allPartner = asyncHandler(async (req, res) => {
         name:true,
         partner:true
 
-      }    
+      },    
+      where:{
+      is_deleted:false
+      }
     });
+
     if(partner){
         return res.status(201).json({
             success:true,
@@ -144,31 +148,31 @@ const onePartner = asyncHandler(async (req, res) => {
     try {
       const is_deleted = true
   
-      const partners = await prisma.partner.findUniqueOrThrow({
+      const partner = await prisma.partner.findUniqueOrThrow({
         where: {
           id: Number(id),
         },
       });
-      console.log(partners?.is_deleted === true, "false")
-  // console.log(partners);
-      if (partners?.is_deleted === true) {
+      console.log(partner?.is_deleted === true, "false")
+  
+      if (partner?.is_deleted === true) {
         res.status(409).json({
           success: false,
-          message: "Partner Not Found"
+          message: "partner Not Found"
         })
   
       }
-  console.log("deress");
-      const deletepartners = await prisma.partner.update({
+  
+      const deletePartner = await prisma.partner.update({
         where: {
           id: Number(id),
         },
-        // data: {
-        //   is_deleted: is_deleted
-        // },
+        data: {
+          is_deleted: is_deleted
+        },
       });
-  console.log(deletepartners);
-      if (deletepartners) {
+  
+      if (deletePartner) {
         res.status(201).json({
           success: true,
           message: `partner deleted successfully`

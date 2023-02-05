@@ -14,6 +14,8 @@ model clients {
   website             String?               @db.VarChar(30)
   email               String?               @db.VarChar(30)
   contact_no          String?               @db.VarChar(30)
+  city                String?               @db.VarChar(30)
+  country             String?               @db.VarChar(30)
   created_by          Int?
   updated_by          Int?
   created_at          DateTime?             @db.Timestamp(0)
@@ -50,7 +52,7 @@ model partner{
   partner                String?        @db.VarChar(100)
   created_by               Int?
   updated_by               Int?
-  id_deleted                Boolean          @default(false)
+  is_deleted             Boolean?             @default(false)
   created_at              DateTime?           @db.Timestamp(0)
   updated_at              DateTime?          @db.Timestamp(0)
 }
@@ -88,6 +90,7 @@ model representative_info {
   email            String?   @unique(map: "email") @db.VarChar(45)
   contact_1        String?   @unique(map: "contact_1") @db.VarChar(45)
   contact_2        String?   @unique(map: "contact_2") @db.VarChar(30)
+  position         String?
   created_by       Int?
   updated_by       Int?
   client_or_vendor Boolean?

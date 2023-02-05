@@ -11,13 +11,13 @@ const email = body("email")
 //     max: 16,
 //   })
 //   .withMessage("Please enter a password a minimum of 8 characters.");
-const address = body("address").isString().withMessage("Address is required.");
-const country = body("country").isString().withMessage("Country is required.");
+const position = body("position").isString().withMessage("position is required.");
+// const country = body("country").isString().withMessage("Country is required.");
 const contact_1 = body("contact_1").isString().withMessage("Contact is required.");
 
 /**@create_user validation */
 const updateRepresentativeValidator = [name, email];
-const createeRepresentativeValidation = [name,email,address,country, contact_1]
+const createeRepresentativeValidation = [name,email,position, contact_1]
 
 
 

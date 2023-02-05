@@ -6,12 +6,13 @@ const prisma = new PrismaClient();
 
 const createRepresentative = asyncHandler(async (req, res) => {
   try {
-    let { name, email, address, contact_1, contact_2, vendor_id, client_id, country } = req.body;
+    let { name, email, position, contact_1, contact_2, vendor_id, client_id, country } = req.body;
 console.log(name);
     const representative = await prisma.representative_info.create({
       data: {
         name: name,
         email:email,
+        position:position,
         contact_1:contact_1,
         contact_2:contact_2,
         client_id:client_id,
@@ -47,6 +48,7 @@ const allRepresentatives = asyncHandler(async (req, res) => {
           email:true,
           contact_1:true,
           contact_2:true,
+          position:true,
           vendors:true,
           clients:true
         },

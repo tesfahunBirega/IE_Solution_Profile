@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 const createClient = asyncHandler(async (req, res) => {
   try {
-    let { name, email, contact_no, website, logo } = req.body;
+    let { name, email, contact_no, website, logo,country,city } = req.body;
 console.log(name,email,contact_no,website);
     // const isExist = await prisma.clients.findUnique({
     //   where: {
@@ -27,6 +27,8 @@ console.log(name,email,contact_no,website);
       const client = await prisma.clients.create({
         data: {
           name: name,
+          country:country,
+          city:city,
           logo: req.file.filename,
           website: website,
           email: email,

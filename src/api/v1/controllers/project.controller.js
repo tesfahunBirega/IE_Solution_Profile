@@ -97,8 +97,17 @@ const allProjects = asyncHandler(async (req, res) => {
         name:true,
         description:true,
         is_deleted: false,
-        solutions:true,
-        vendors:true
+        client:true,
+        solutions:{
+          where:{
+          is_deleted:false
+          }
+        },
+        vendors:{
+          where:{
+          is_deleted:false
+          }
+        }
 
       }
     });

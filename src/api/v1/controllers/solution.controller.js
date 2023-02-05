@@ -13,8 +13,8 @@ const createSolution = asyncHandler(async (req, res) => {
         name: name,
         description: description,
         logo:req.file.filename,
-        // email:email,
-        // contact_no:contact_no,
+        email:email,
+        contact_no:contact_no,
         created_by:req.authUser.id,
         created_at:new Date()
       },
