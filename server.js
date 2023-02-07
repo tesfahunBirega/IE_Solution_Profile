@@ -56,9 +56,9 @@ app.use(
   require("./src/api/v1/routes/partners.routes")
 );
 app.use(
-  "/api/v1/projectFill",
+  "/api/v1/department",
   cors(corsOptions),
-  require("./src/api/v1/routes/projectFill.routes")
+  require("./src/api/v1/routes/department.routes")
 );
 app.use(
   "/api/v1/solution",

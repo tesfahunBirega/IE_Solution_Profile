@@ -6,8 +6,18 @@ const prisma = new PrismaClient();
 
 const createSolution = asyncHandler(async (req, res) => {
   try {
-    let {name, email,description,contact_no  } = req.body;
+    let {name, email,description,contact_no,department_id  } = req.body;
+    console.log(name);
 
+    departmentt = []
+
+    department_id.map((id) => {
+      let obj = {
+        "id": id 
+      }
+      departmentt.push(obj)
+    })
+    console.log(typeof(departmentt));
     const solution = await prisma.solutions.create({
       data: {
         name: name,
@@ -16,7 +26,10 @@ const createSolution = asyncHandler(async (req, res) => {
         email:email,
         contact_no:contact_no,
         created_by:req.authUser.id,
-        created_at:new Date()
+        created_at:new Date(),
+        // department:{
+        //   connect: departmentt
+        // }
       },
     });
 console.log(solution);

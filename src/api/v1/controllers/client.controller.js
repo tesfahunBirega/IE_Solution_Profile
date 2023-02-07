@@ -6,24 +6,10 @@ const prisma = new PrismaClient();
 
 const createClient = asyncHandler(async (req, res) => {
   try {
-    let { name, email, contact_no, website, logo,country,city } = req.body;
-console.log(name,email,contact_no,website);
-    // const isExist = await prisma.clients.findUnique({
-    //   where: {
-    //     email: email
-    //   }
-    // })
-    // console.log(isExist)
+    let { name, email, contact_no, website,country,city } = req.body;
+// console.log(name);
+// console.log(email);
 
-    // if (isExist) {
-    //   res.status(409).json({
-    //     success: false,
-    //     message: "Client already exist"
-    //   })
-
-    // }
-
-    // else {
       const client = await prisma.clients.create({
         data: {
           name: name,
@@ -35,7 +21,7 @@ console.log(name,email,contact_no,website);
           contact_no: contact_no,
           created_by:req.authUser.id,
           created_at:new Date()
-        },
+        },  
       });
       console.log(client)
 

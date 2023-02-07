@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 
 const createProject = asyncHandler(async (req, res) => {
   try {
-    let { name, description, vendor_id, projectfill_id, solution_id,representative_id } = req.body;
+    let { name, description, vendor_id, projectfill_id, solution_id,representative_id,client } = req.body;
 
     solutionss = []
     solution_id.map((id) => {
@@ -42,8 +42,9 @@ const createProject = asyncHandler(async (req, res) => {
       data: {
         name: name,
         description: description,
+        // client_id:client,
         created_by:req.authUser.id,
-        projectFill_id: projectfill_id,
+        // projectFill_id: projectfill_id,
         created_by:req.authUser.id,
           created_at:new Date(),
         // representative_id: representative_id,
@@ -66,7 +67,7 @@ const createProject = asyncHandler(async (req, res) => {
 
       }
   })
-  // console.log(project)
+  console.log(project)
   if (project) {
       return res.status(201).json({
         success: true,

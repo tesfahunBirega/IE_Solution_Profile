@@ -16,7 +16,7 @@ app.use("/user", require("./routes/users.routes"));
 app.use("/client", require("./routes/clients.routes"));
 app.use("/project", require("./routes/projects.routes"));
 app.use("/representative", require("./routes/representatives.routes"));
-app.use("/projectFill", require("./routes/projectFill.routes"));
+app.use("/department", require("./routes/department.routes"));
 app.use("/solution", require("./routes/solutions.routes"));
 app.use("/vendor", require("./routes/vendors.routes"));
 app.use("/certeficate", require("./routes/certeficates.routes"));

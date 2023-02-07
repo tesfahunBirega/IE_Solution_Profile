@@ -28,7 +28,7 @@ const {
   deleteVendor,
  
 } = require("../controllers/vendor.controller");
- vendorRoute.post("/create",authMiddleware,uploade.single("logo"),createVendorValidation,validationMiddleware, uploade.single("logo"), createVendor);
+ vendorRoute.post("/create",authMiddleware,uploade.single("logo"),createVendorValidation,validationMiddleware, createVendor);
  vendorRoute.get("/",allVendors);
  vendorRoute.get("/:id", oneVendor);
  vendorRoute.patch("/:id",authMiddleware,uploade.single("logo"),updateVendorValidator, validationMiddleware,updateVendor);

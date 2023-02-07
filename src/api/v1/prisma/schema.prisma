@@ -26,7 +26,7 @@ model clients {
   create              users?                @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_clients_user")
   update              users?                @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_clients_user1")
   representative_info representative_info[]
-
+project                 project[]
   @@unique([id, website], map: "id")
   @@unique([id, email], map: "id_2")
   @@unique([id, contact_no], map: "id_3")
@@ -63,19 +63,23 @@ model project {
   // solution_id         Int?
   // representative_id   Int?
   // vendor_id           Int?
+  client_id              Int?
   created_by          Int?
   updated_by          Int?
   created_at          DateTime?             @db.Timestamp(0)
   updated_at          DateTime?             @db.Timestamp(0)
   is_deleted          Boolean?              @default(false)
   projectFill_id      Int?
-  projectFill         projectfill?          @relation("projectToprojectFill", fields: [projectFill_id], references: [id], onDelete: Cascade, map: "Fk_project_projectFill")
+  // projectFill         department?          @relation("projectToprojectFill", fields: [projectFill_id], references: [id], onDelete: Cascade, map: "Fk_project_projectFill")
   create              users?                @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_project_user")
   update              users?                @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_project_user1")
   representative_info representative_info[] @relation("projecttorepresentative_info")
   solutions           solutions[]           @relation("projecttosolutions")
   vendors             vendors[]             @relation("projecttovendors")
+  clients             clients?  @relation(fields: [client_id], references: [id], onDelete: Cascade, map: "Fk_project client")
 
+  // @@index([department_id], map: "Fk_project_department")
+  @@index([client_id], map: "Fk_project_clients")
   @@index([created_by], map: "Fk_clients_user")
   @@index([updated_by], map: "Fk_clients_user1")
   @@index([projectFill_id], map: "Fk_project_projectFill")
@@ -120,6 +124,7 @@ model solutions {
   logo        String?   @db.VarChar(40)
   email       String?   @unique(map: "email") @db.VarChar(40)
   contact_no  String?   @db.VarChar(40)
+  department_id          Int?
   created_by  Int?
   updated_by  Int?
   created_at  DateTime? @default(now()) @db.Timestamp(0)
@@ -129,6 +134,7 @@ model solutions {
   create      users?    @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_solutions_user")
   update      users?    @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_solutions_user1")
   project     project[] @relation("projecttosolutions")
+  department             department[] @relation("solutiontodepartment")
 
   @@index([updated_by], map: "Fk_solutions_user1")
   @@index([created_by], map: "Fk_solutions_user")
@@ -153,8 +159,8 @@ model users {
   updated_client                            clients[]             @relation("update")
   created_project                           project[]             @relation("create")
   updated_project                           project[]             @relation("update")
-  projectfill_projectfill_created_byTousers projectfill[]         @relation("projectfill_created_byTousers")
-  projectfill_projectfill_updated_byTousers projectfill[]         @relation("projectfill_updated_byTousers")
+  projectfill_projectfill_created_byTousers department[]         @relation("projectfill_created_byTousers")
+  projectfill_projectfill_updated_byTousers department[]         @relation("projectfill_updated_byTousers")
   create_representative_info                representative_info[] @relation("create")
   update_representative_info                representative_info[] @relation("update")
   create_solutions                          solutions[]           @relation("create")
@@ -200,10 +206,11 @@ model vendors {
   @@index([address_id], map: "Fk_vendor_address")
 }
 
-model projectfill {
+model department {
   id                                  Int       @id @default(autoincrement())
   name                                String?   @db.VarChar(30)
   description                         String?   @db.VarChar(30)
+  logo                                String?    @db.VarChar(30)
   created_by                          Int?
   updated_by                          Int?
   created_at                          DateTime? @db.Timestamp(0)
@@ -211,7 +218,7 @@ model projectfill {
   is_deleted                          Boolean?  @default(false)
   users_projectfill_created_byTousers users?    @relation("projectfill_created_byTousers", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_projectFill_user")
   users_projectfill_updated_byTousers users?    @relation("projectfill_updated_byTousers", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_projectFill_user1")
-  project                             project[] @relation("projectToprojectFill")
+  solutions          solutions[] @relation("solutiontodepartment")
 
   @@index([created_by], map: "Fk_projectFill_user")
   @@index([updated_by], map: "Fk_projectFill_user1")

@@ -3,12 +3,12 @@ const express = require("express");
 const clientRoute = express.Router();
 
 const multer = require("multer");
-const path = require('path');
+const path = require("path");
 
- const storage = multer.diskStorage({
+const storage = multer.diskStorage({
   destination:"public",
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`)
+    cb(null, `${Date.now()}_${file.originalname}]`)
   }
 })
 

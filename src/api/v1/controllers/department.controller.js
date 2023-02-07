@@ -4,14 +4,15 @@ const { request } = require("express");
 
 const prisma = new PrismaClient();
 
-const createProjectFill = asyncHandler(async (req, res) => {
+const createDepartment = asyncHandler(async (req, res) => {
   try {
     let { name,description } = req.body;
 
-    const projectFill = await prisma.projectFill.create({
+    const department = await prisma.department.create({
       data: {
         name: name,
         description:description,
+        logo:req.file.filename,
         // updated_by:updated_by,
         created_by:req.authUser.id,
         created_at:new Date()
@@ -21,12 +22,12 @@ const createProjectFill = asyncHandler(async (req, res) => {
 
     });
 // console.log(projectFill)
-    if (projectFill) {
+    if (department) {
       return res.status(201).json({
         success: true,
         status: 201,
-        message: "projectFill created successfully!!!",
-        data: projectFill,
+        message: "department created successfully!!!",
+        data: department,
       });
     }
   } catch (error) {
@@ -37,19 +38,19 @@ const createProjectFill = asyncHandler(async (req, res) => {
   }
 });
 
-const allProjectFill = asyncHandler(async (req, res) => {
+const allDepartment = asyncHandler(async (req, res) => {
     try {
-      const projectFill = await prisma.projectFill.findMany({
-        whrere: {
+      const department = await prisma.department.findMany({
+        where: {
       is_deleted: false
         }
       });
-      if (projectFill) {
+      if (department) {
         return res.status(201).json({
           success: true,
           status: 201,
-          message: `All projectFill find successfully!!!`,
-          data: projectFill,
+          message: `All department find successfully!!!`,
+          data: department,
         });
       }
     } catch (error) {
@@ -61,26 +62,26 @@ const allProjectFill = asyncHandler(async (req, res) => {
   });
 
   
-const oneProjectFill = asyncHandler(async (req, res) => {
+const oneDepartment = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      const projectFill = await prisma.projectFill.findUniqueOrThrow({
+      const projectFill = await prisma.department.findUniqueOrThrow({
         where: {
           id: Number(id),
         },
       });
-      if(projectFill?.is_deleted === true){
+      if(department?.is_deleted === true){
         res.status(409).json({
           success:false,
-          message: "Project Not Found"
+          message: "department Not Found"
         })
       }
-      if (projectFill) {
+      if (department) {
         return res.status(201).json({
           success: true,
           status: 201,
-          message: `${projectFill.name} find successfully!!!`,
-          data: projectFill,
+          message: `${department.name} find successfully!!!`,
+          data: department,
         });
       }
     } catch (error) {
@@ -91,11 +92,11 @@ const oneProjectFill = asyncHandler(async (req, res) => {
     }
   });
   
-  const updateProjectFill = asyncHandler(async (req, res) => {
+  const updateDepartment = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
       let { name, email } = req.body;
-      const projectFill = await prisma.projectFill.update({
+      const department = await prisma.department.update({
         where: {
           id: Number(id),
         },
@@ -106,18 +107,18 @@ const oneProjectFill = asyncHandler(async (req, res) => {
           created_at:new Date()
         },
       });
-      if(projectFill?.isdeleted === true){
+      if(department?.isdeleted === true){
         res.status(409).json({
           success:false,
-          message: "project Not Found"
+          message: "department Not Found"
         })
       }
-      if (projectFill) {
+      if (department) {
         return res.status(201).json({
           success: true,
           status: 201,
-          message: "projectFill updated successfully!!!",
-          data: projectFill,
+          message: "department updated successfully!!!",
+          data: department,
         });
       }
     } catch (error) {
@@ -128,7 +129,7 @@ const oneProjectFill = asyncHandler(async (req, res) => {
     }
   });
   
-  const deleteProjectFill = asyncHandler(async (req, res) => {
+  const deleteDepartment = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const projectFill = await prisma.projectFill.delete({
       where: {
@@ -151,9 +152,9 @@ const oneProjectFill = asyncHandler(async (req, res) => {
     }
   });
 module.exports = {
-  createProjectFill,
-  oneProjectFill,
-  allProjectFill,
-  updateProjectFill,
-  deleteProjectFill,
+  createDepartment,
+  oneDepartment,
+  allDepartment,
+  updateDepartment,
+  deleteDepartment,
 };
