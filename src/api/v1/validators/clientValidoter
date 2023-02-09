@@ -13,12 +13,12 @@ const password = body("password")
   .withMessage("Please enter a password a minimum of 8 characters.");
 // const gender = body("gender").isString().withMessage("Gender is required.");
 //const logo = body("logo").isString().withMessage("logo is required.");
-const contact_no = body("contact_no").isString().withMessage("contact_no is required.");
+const contact_phone = body("contact_phone").isString().withMessage("contact_phone is required.");
 // const address = body("address").isString().withMessage("address is required.");
 
 /**@create_user validation */
 const updateClientValidator = [name, email];
-const createClientValidation = [name, email, contact_no]
+const createClientValidation = [name, email, contact_phone]
 
 
 

@@ -61,6 +61,11 @@ app.use(
   require("./src/api/v1/routes/department.routes")
 );
 app.use(
+  "/api/v1/sector",
+  cors(corsOptions),
+  require("./src/api/v1/routes/sector.routes")
+);
+app.use(
   "/api/v1/solution",
   cors(corsOptions),
   require("./src/api/v1/routes/solutions.routes")

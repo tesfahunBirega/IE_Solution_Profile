@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 
 const createProject = asyncHandler(async (req, res) => {
   try {
-    let { name, description, vendor_id, projectfill_id, solution_id,representative_id,client } = req.body;
+    let { name, description, vendor_id, client_id, solution_id,representative_id,sector_id } = req.body;
 
     solutionss = []
     solution_id.map((id) => {
@@ -44,7 +44,8 @@ const createProject = asyncHandler(async (req, res) => {
         description: description,
         // client_id:client,
         created_by:req.authUser.id,
-        // projectFill_id: projectfill_id,
+        client_id: client_id,
+        sector_id:sector_id,
         created_by:req.authUser.id,
           created_at:new Date(),
         // representative_id: representative_id,
@@ -89,6 +90,9 @@ const createProject = asyncHandler(async (req, res) => {
 const allProjects = asyncHandler(async (req, res) => {
   try {
     const project = await prisma.project.findMany({
+      where:{
+        is_deleted:false
+           },
       select: {
         id:true,
         // logo:true
@@ -98,7 +102,7 @@ const allProjects = asyncHandler(async (req, res) => {
         name:true,
         description:true,
         is_deleted: false,
-        client:true,
+        // client:true,
         solutions:{
           where:{
           is_deleted:false
@@ -108,11 +112,24 @@ const allProjects = asyncHandler(async (req, res) => {
           where:{
           is_deleted:false
           }
-        }
+        },
+        clients:true
+        // clients:{
+        //  where:{
+        //  is_deleted:false
+        //          }
+        // }
 
-      }
+      },
+     
     });
-    // console.log(project);
+    // if(project?.is_deleted === true){
+    //      res.status(409).json({
+    //       success:false,
+    //       message:"Project Not Found"
+    //      })
+    // }
+    console.log(project,"project data");
     if (project) {
       return res.status(201).json({
         success: true,
@@ -143,7 +160,8 @@ const oneProject = asyncHandler(async (req, res) => {
         description:true,
         is_deleted:false,
         solutions:true,
-        vendors:true
+        vendors:true,
+        clients:true
       }
     });
     // console.log(project?.is_deleted === true);
@@ -241,7 +259,7 @@ if (deleteproject) {
 else {
   res.status(400).json({
     success: false,
-    message: "Something gose wrong please try again"
+    message: "Something wrong please try again"
   });
 }
 }catch (error) {

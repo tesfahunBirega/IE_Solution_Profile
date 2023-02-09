@@ -15,18 +15,18 @@ model clients {
   email               String?               @db.VarChar(30)
   contact_no          String?               @db.VarChar(30)
   city                String?               @db.VarChar(30)
-  country             String?               @db.VarChar(30)
+  addresss             String?               @db.VarChar(30)
   created_by          Int?
   updated_by          Int?
   created_at          DateTime?             @db.Timestamp(0)
   updated_at          DateTime?             @db.Timestamp(0)
   is_deleted          Boolean?              @default(false)
   address_id          Int?
-  address             address?              @relation(fields: [address_id], references: [id], onDelete: Cascade, map: "Fk_client_address")
+  // address             address?              @relation(fields: [address_id], references: [id], onDelete: Cascade, map: "Fk_client_address")
   create              users?                @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_clients_user")
   update              users?                @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_clients_user1")
   representative_info representative_info[]
-project                 project[]
+project                 project[]        
   @@unique([id, website], map: "id")
   @@unique([id, email], map: "id_2")
   @@unique([id, contact_no], map: "id_3")
@@ -64,12 +64,13 @@ model project {
   // representative_id   Int?
   // vendor_id           Int?
   client_id              Int?
+  sector_id              Int?
   created_by          Int?
   updated_by          Int?
   created_at          DateTime?             @db.Timestamp(0)
   updated_at          DateTime?             @db.Timestamp(0)
   is_deleted          Boolean?              @default(false)
-  projectFill_id      Int?
+  // projectFill_id      Int?
   // projectFill         department?          @relation("projectToprojectFill", fields: [projectFill_id], references: [id], onDelete: Cascade, map: "Fk_project_projectFill")
   create              users?                @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_project_user")
   update              users?                @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_project_user1")
@@ -77,12 +78,14 @@ model project {
   solutions           solutions[]           @relation("projecttosolutions")
   vendors             vendors[]             @relation("projecttovendors")
   clients             clients?  @relation(fields: [client_id], references: [id], onDelete: Cascade, map: "Fk_project client")
+  sectors             sectors?  @relation(fields: [sector_id], references: [id], onDelete: Cascade, map: "Fk_project sectors")
 
   // @@index([department_id], map: "Fk_project_department")
+  @@index([sector_id], map: "Fk_project_sectors")
   @@index([client_id], map: "Fk_project_clients")
   @@index([created_by], map: "Fk_clients_user")
   @@index([updated_by], map: "Fk_clients_user1")
-  @@index([projectFill_id], map: "Fk_project_projectFill")
+  // @@index([projectFill_id], map: "Fk_project_projectFill")
   // @@index([representative_id], map: "representative_id")
   // @@index([solution_id], map: "solution_id")
   // @@index([vendor_id], map: "vendor_id")
@@ -105,7 +108,7 @@ model representative_info {
   is_deleted       Boolean?  @default(false)
   address_id       Int?
   clients          clients?  @relation(fields: [client_id], references: [id], onDelete: Cascade, map: "Fk_client_representatives")
-  address          address?  @relation(fields: [address_id], references: [id], onDelete: Cascade, map: "Fk_representative_info_address")
+  // address          address?  @relation(fields: [address_id], references: [id], onDelete: Cascade, map: "Fk_representative_info_address")
   create           users?    @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_representatives_user")
   update           users?    @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_representatives_user1")
   vendors          vendors?  @relation(fields: [vendor_id], references: [id], onDelete: Cascade, map: "Fk_vendor_representatives")
@@ -134,7 +137,7 @@ model solutions {
   create      users?    @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_solutions_user")
   update      users?    @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_solutions_user1")
   project     project[] @relation("projecttosolutions")
-  department             department[] @relation("solutiontodepartment")
+  department  department[] @relation("solutiontodepartment")
 
   @@index([updated_by], map: "Fk_solutions_user1")
   @@index([created_by], map: "Fk_solutions_user")
@@ -169,17 +172,16 @@ model users {
   updated_vendor                            vendors[]             @relation("update")
 }
 
-model address {
-  id             Int                   @id @default(autoincrement())
-  country        String?               @db.VarChar(45)
-  city           String?               @db.VarChar(45)
-  postal_code    String?               @db.VarChar(45)
-  town           String?               @db.VarChar(45)
+model sectors {
+  id             Int                @id @default(autoincrement())
+  name                String?               @db.VarChar(45)
+  created_by    Int?
+  updated_by    Int? 
   created_at     DateTime?             @db.Timestamp(0)
   update_at      DateTime?             @db.Timestamp(0)
-  client         clients[]
-  representative representative_info[]
-  vendor         vendors[]
+  is_deleted          Boolean?              @default(false)
+  project                 project[]        
+
 }
 
 model vendors {
@@ -195,7 +197,7 @@ model vendors {
   updated_by          Int?
   is_deleted          Boolean?              @default(false)
   address_id          Int?
-  address             address?              @relation(fields: [address_id], references: [id], onDelete: Cascade, map: "Fk_vendor_address")
+  // address             address?              @relation(fields: [address_id], references: [id], onDelete: Cascade, map: "Fk_vendor_address")
   create              users?                @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_vendors_user")
   update              users?                @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_vendors_user1")
   representative_info representative_info[]

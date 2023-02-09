@@ -6,19 +6,19 @@ const prisma = new PrismaClient();
 
 const createClient = asyncHandler(async (req, res) => {
   try {
-    let { name, email, contact_no, website,country,city } = req.body;
+    let { name, email, contact_phone, website,address,city } = req.body;
 // console.log(name);
 // console.log(email);
 
       const client = await prisma.clients.create({
         data: {
           name: name,
-          country:country,
+          addresss:address,
           city:city,
           logo: req.file.filename,
           website: website,
           email: email,
-          contact_no: contact_no,
+          contact_no: contact_phone,
           created_by:req.authUser.id,
           created_at:new Date()
         },  
@@ -135,7 +135,7 @@ const updateClient = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     // console.log(req.authUser)
-    let { name, email, website, contact_no } = req.body;
+    let { name, email, website, contact_phone,address } = req.body;
     
     console.log(name);
     const client = await prisma.clients.update({
@@ -146,8 +146,8 @@ const updateClient = asyncHandler(async (req, res) => {
         name: name,
         email: email,
         website: website,
-        contact_no: contact_no,
-        // address: address
+        contact_no: contact_phone,
+        addresss: address,
        logo:req.file.filename,
         updated_by:req.authUser.id,
           updated_at:new Date()

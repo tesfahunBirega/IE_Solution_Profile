@@ -65,7 +65,7 @@ const allDepartment = asyncHandler(async (req, res) => {
 const oneDepartment = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      const projectFill = await prisma.department.findUniqueOrThrow({
+      const department = await prisma.department.findUniqueOrThrow({
         where: {
           id: Number(id),
         },
@@ -131,24 +131,54 @@ const oneDepartment = asyncHandler(async (req, res) => {
   
   const deleteDepartment = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const projectFill = await prisma.projectFill.delete({
-      where: {
-        id: Number(id),
-      },
-    });
-    if(projectFill?.isdeleted === true){
-      res.status(409).json({
-        success:false,
-        message: "project Not Found"
-      })
-    }
-    if (projectFill) {
-      return res.status(201).json({
-        success: true,
-        status: 201,
-        message: `${projectFill.name} deleted successfully!!!`,
-        data: projectFill,
+    // console.log(req, "request from client")
+    try {
+      const is_deleted = true
+  
+      const department = await prisma.department.findUniqueOrThrow({
+        where: {
+          id: Number(id),
+        },
       });
+      console.log(department?.is_deleted === true, "false")
+  
+      if (department?.is_deleted === true) {
+        res.status(409).json({
+          success: false,
+          message: "department Not Found"
+        })
+  
+      }
+  
+      const deletedepartment = await prisma.department.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          is_deleted: is_deleted
+        },
+      });
+  
+      if (deletedepartment) {
+        res.status(201).json({
+          success: true,
+          message: `department deleted successfully`
+        })
+      }
+      else {
+        res.status(400).json({
+          success: false,
+          message: "Something wrong please try again"
+        });
+      }
+  
+    } catch (error) {
+      res.status(400).json({
+        error: error,
+        message: error.code,
+      });
+  
+  
     }
   });
 module.exports = {

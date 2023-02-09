@@ -21,6 +21,7 @@ app.use("/solution", require("./routes/solutions.routes"));
 app.use("/vendor", require("./routes/vendors.routes"));
 app.use("/certeficate", require("./routes/certeficates.routes"));
 app.use("/partner", require("./routes/partners.routes"));
+app.use("/sector", require("./routes/sector.routes"));
 
 // app.use("/partner", require("./routes/partners.routes"));
 

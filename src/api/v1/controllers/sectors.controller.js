@@ -4,41 +4,25 @@ const { request } = require("express");
 
 const prisma = new PrismaClient();
 
-const createSolution = asyncHandler(async (req, res) => {
+const createSector = asyncHandler(async (req, res) => {
   try {
-    let {name, email,description,contact_no,department_id,department  } = req.body;
-    console.log(name);
-
-    // department_id = []
-    // department.map((id) => {
-    //   let obj = {
-    //     "id": id 
-    //   }
-    //   department_id.push(obj)
-    // })
-    console.log(typeof(department_id));
-    const solution = await prisma.solutions.create({
+    let { name} = req.body;
+console.log(name);
+    const sectors = await prisma.sectors.create({
       data: {
         name: name,
-        description: description,
-        department_id:department,
-        logo:req.file.filename,
-        // email:email,
-        // contact_no:contact_no,
         created_by:req.authUser.id,
-        created_at:new Date(),
-        // department:{
-        //   connect: department_id
-        // }
+        created_at:new Date()
+
       },
     });
-console.log(solution);
-    if (solution) {
+console.log(sectors);
+    if (sectors) {
       return res.status(201).json({
         success: true,
         status: 201,
-        message: "solution created successfully!!!",
-        data: solution,
+        message: "sectors created successfully!!!",
+        data: sectors,
       });
     }
   } catch (error) {
@@ -49,19 +33,25 @@ console.log(solution);
   }
 });
 
-const allSolutions = asyncHandler(async (req, res) => {
+const allSector = asyncHandler(async (req, res) => {
     try {
-      const solution = await prisma.solutions.findMany({
-        where: {
-          is_deleted: false
+      const sectors = await prisma.sectors.findMany({
+        select: {
+          id:true,
+          name:true,
+         
+        },
+        where:{
+            is_deleted:false
         }
-    });
-      if (solution) {
+      });
+      // console.log(representative);
+      if (sectors) {
         return res.status(201).json({
           success: true,
           status: 201,
-          message: `All solution find successfully!!!`,
-          data: solution,
+          message: `All sectors find successfully!!!`,
+          data: sectors,
         });
       }
     } catch (error) {
@@ -73,26 +63,26 @@ const allSolutions = asyncHandler(async (req, res) => {
   });
 
   
-const oneSolution = asyncHandler(async (req, res) => {
+const oneSector = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      const solution = await prisma.solutions.findUniqueOrThrow({
+      const sectors = await prisma.sectors.findUniqueOrThrow({
         where: {
           id: Number(id),
         },
       });
-      if(solution?.is_deleted === true){
+      if(sectors?.is_deleted === true){
         res.status(409).json({
           success:false,
-          message: "solution Not Found"
+          message: "sectors Not Found"
         })
       }
-      if (solution) {
+      if (sectors) {
         return res.status(201).json({
           success: true,
           status: 201,
-          message: `${solution.name} find successfully!!!`,
-          data: solution,
+          message: `${sectors.name} find successfully!!!`,
+          data: sectors,
         });
       }
     } catch (error) {
@@ -103,39 +93,34 @@ const oneSolution = asyncHandler(async (req, res) => {
     }
   });
   
-  const updateSolution = asyncHandler(async (req, res) => {
+  const updateSector = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      let { name, description } = req.body;
-      console.log(name,description);
-      const solution = await prisma.solutions.update({
+      let { name} = req.body;
+      const sectors = await prisma.sectors.update({
         where: {
           id: Number(id),
         },
         data: {
           name: name,
-          description: description,
-          logo:req.file.filename,
           updated_by:req.authUser.id,
           updated_at:new Date()
-          
+
         },
       });
-      console.log(solution);
-      if(solution?.is_deleted === true){
+      if(sectors?.is_deleted === true){
         res.status(409).json({
           success:false,
-          message: "solution Not Found"
+          message: "sector Not Found"
         })
-      }
-      if (solution) {
+      if (representative) {
         return res.status(201).json({
           success: true,
           status: 201,
-          message: "Solution updated successfully!!!",
-          data: solution,
+          message: "sector updated successfully!!!",
+          data: representative,
         });
-      }
+      }}
     } catch (error) {
       res.status(400).json({
         error: error,
@@ -144,25 +129,26 @@ const oneSolution = asyncHandler(async (req, res) => {
     }
   });
   
-  const deleteSolution = asyncHandler(async (req, res) => {
+  const deleteSector = asyncHandler(async (req, res) => {
     const { id } = req.params;
+
     try {
       const is_deleted = true
     
-      const solution = await prisma.solutions.findUniqueOrThrow({
+      const sectors = await prisma.sectors.findUniqueOrThrow({
         where: {
           id: Number(id),
         },
       });
-      console.log(solution?.is_deleted === true, "false")
+      console.log(sectors?.is_deleted === true, "false")
       
-      if(solution?.is_deleted === true){
+      if(sectors?.is_deleted === true){
         res.status(409).json({
           success:false,
-          message: "solution Not Found"
+          message: "sector Not Found"
         })
       }
-      const deletesolutions = await prisma.solutions.update({
+      const deletesector = await prisma.sectors.update({
         where: {
           id: Number(id),
         },
@@ -171,10 +157,10 @@ const oneSolution = asyncHandler(async (req, res) => {
         },
       });
   
-      if (deletesolutions) {
+      if (deletesector) {
         res.status(201).json({
           success: true,
-          message: `solutions deleted successfully`
+          message: `sector deleted successfully`
         })
       }
       else {
@@ -192,24 +178,24 @@ const oneSolution = asyncHandler(async (req, res) => {
   
   
     }
-    // const solution = await prisma.solutions.delete({
+    // const representative = await prisma.representative_info.delete({
     //   where: {
     //     id: Number(id),
     //   },
     // });
-    // if (solution) {
+    // if (representative) {
     //   return res.status(201).json({
     //     success: true,
     //     status: 201,
-    //     message: `${solution.name} deleted successfully!!!`,
-    //     data: solution,
+    //     message: `${representative.name} deleted successfully!!!`,
+    //     data: representative,
     //   });
     // }
   });
 module.exports = {
-  createSolution,
-  oneSolution,
-  allSolutions,
-  updateSolution,
-  deleteSolution,
+  createSector,
+  oneSector,
+  allSector,
+  updateSector,
+  deleteSector,
 };
