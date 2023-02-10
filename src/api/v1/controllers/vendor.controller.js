@@ -6,23 +6,23 @@ const prisma = new PrismaClient();
 
 const createVendor = asyncHandler(async (req, res) => {
   try {
-    let { name, website, email, contact_phone  } = req.body;
-
-console.log(name,website,email,contact_phone);
-
+    let { name, website, email, contact_phone,address  } = req.body;
+console.log(req.body.name);
+// console.log(name,website,email,contact_phone,address);
     const vendor = await prisma.vendors.create({
       data: {
         name: name,
         logo:req.file.filename,
         website:website,
         email:email,
+        address:address,
         contact_phone:contact_phone,
         created_by: req.authUser.id,
         created_at:new Date()
 
       },
     });
-
+console.log(vendor,"its vendor data");
     if (vendor) {
       return res.status(201).json({
         success: true,
@@ -102,7 +102,9 @@ const oneVendor = asyncHandler(async (req, res) => {
   const updateVendor = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      let { name, email,contact_phone,website } = req.body;
+      console.log(req.body
+        );
+      let { name, email,contact_phone,website,address } = req.body;
       const vendor = await prisma.vendors.update({
         where: {
           id: Number(id),
@@ -111,10 +113,11 @@ const oneVendor = asyncHandler(async (req, res) => {
           name: name,
           email: email,
           contact_phone:contact_phone,
+          address:address,
           website:website,
           logo:req.file.filename,
-          updated_by_by:req.authUser.id,
-          updated_at:new Date()
+          updated_by:req.authUser.id,
+          update_at:new Date()
         },
       });
       if(vendor?.is_deleted === true){

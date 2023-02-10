@@ -10,7 +10,7 @@ const createDepartment = asyncHandler(async (req, res) => {
 
     const department = await prisma.department.create({
       data: {
-        name: name,
+        name:name,
         description:description,
         logo:req.file.filename,
         // updated_by:updated_by,
@@ -95,14 +95,15 @@ const oneDepartment = asyncHandler(async (req, res) => {
   const updateDepartment = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      let { name, email } = req.body;
+      let { name, description } = req.body;
       const department = await prisma.department.update({
         where: {
           id: Number(id),
         },
         data: {
           name: name,
-          email: email,
+          logo: req.file.filename,
+          description:description,
           updated_by: req.authUser.id,
           created_at:new Date()
         },

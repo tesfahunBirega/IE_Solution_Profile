@@ -31,7 +31,7 @@ DepartmentRoute.post("/create",uploade.single("logo"), authMiddleware, createDep
 
 DepartmentRoute.get("/",allDepartment);
 DepartmentRoute.get("/:id", oneDepartment);
-DepartmentRoute.patch("/:id", authMiddleware,updateSectorValidator, validationMiddleware,updateDepartment);
+DepartmentRoute.patch("/:id",uploade.single("logo"), authMiddleware,updateDepartment);
 DepartmentRoute.delete("/:id",authMiddleware, deleteDepartment);
 
 DepartmentRoute.get("/read", (req, res) => {

@@ -198,6 +198,7 @@ model vendors {
   updated_by          Int?
   is_deleted          Boolean?              @default(false)
   address_id          Int?
+  address            String?                @db.VarChar(45)
   // address             address?              @relation(fields: [address_id], references: [id], onDelete: Cascade, map: "Fk_vendor_address")
   create              users?                @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_vendors_user")
   update              users?                @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_vendors_user1")
