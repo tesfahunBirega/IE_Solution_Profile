@@ -98,6 +98,7 @@ model representative_info {
   contact_1        String?   @unique(map: "contact_1") @db.VarChar(45)
   contact_2        String?   @unique(map: "contact_2") @db.VarChar(30)
   position         String?
+  address          String?   @db.VarChar(45)
   created_by       Int?
   updated_by       Int?
   client_or_vendor Boolean?
@@ -174,7 +175,7 @@ model users {
 
 model sectors {
   id             Int                @id @default(autoincrement())
-  name                String?               @db.VarChar(45)
+  name          String?              @db.VarChar(30)
   created_by    Int?
   updated_by    Int? 
   created_at     DateTime?             @db.Timestamp(0)

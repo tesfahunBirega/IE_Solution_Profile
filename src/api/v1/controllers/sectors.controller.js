@@ -1,16 +1,17 @@
 const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require("@prisma/client");
 const { request } = require("express");
+const { response, connect } = require("..");
 
 const prisma = new PrismaClient();
 
 const createSector = asyncHandler(async (req, res) => {
   try {
-    let { name} = req.body;
-console.log(name);
+    let  {name} = req.params.name;
+    console.log(name);
     const sectors = await prisma.sectors.create({
       data: {
-        name: name,
+        name: req.body.name,
         created_by:req.authUser.id,
         created_at:new Date()
 
@@ -33,6 +34,18 @@ console.log(sectors);
   }
 });
 
+// const createSector=(request,response)=>{
+//     const name=request.body.name;
+//     const created_by=request.authUser.id;
+//     const created_at=new Date();
+//     connect.query("INSERT INTO `sectors`(`name`, `created_by`, `created_at`) VALUES ('?,?,?')",[name,created_by,created_at],(err,result)=>{
+//         if(err){
+//             console.log(err);
+//         }else{
+//             response.send(result)
+//         }
+//     })
+// }
 const allSector = asyncHandler(async (req, res) => {
     try {
       const sectors = await prisma.sectors.findMany({
