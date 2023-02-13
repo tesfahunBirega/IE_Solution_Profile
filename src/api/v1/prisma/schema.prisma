@@ -147,7 +147,7 @@ model solutions {
 model users {
   id                                        Int                   @id @default(autoincrement())
   email                                     String?               @unique @db.VarChar(20)
-  password                                  String?               @db.VarChar(20)
+  password                                  String?               @db.VarChar(200)
   isAdmin                                   Boolean?
   created_at                                String?               @db.VarChar(20)
   updated_at                                String?               @db.VarChar(20)

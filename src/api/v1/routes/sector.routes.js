@@ -25,7 +25,7 @@ const {
 
 
 
-sectorRoute.post("/create/:name",authMiddleware,createSector);
+sectorRoute.post("/create",authMiddleware,createSector);
 sectorRoute.get("/", allSector);
 sectorRoute.get("/:id", oneSector);
 sectorRoute.patch("/:id",authMiddleware,updateSector);

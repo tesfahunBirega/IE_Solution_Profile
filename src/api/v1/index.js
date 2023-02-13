@@ -7,6 +7,11 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use("/api/v1/sector/create", (req,res,next) => {
+  console.log("object");
+  console.log(req.body);
+  next();
+})
 app.get("/", (req, res) => {
   res.send("<h1>This is IE Solutio Profile Home page</h1>");
 });

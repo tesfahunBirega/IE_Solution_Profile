@@ -7,11 +7,12 @@ const prisma = new PrismaClient();
 
 const createSector = asyncHandler(async (req, res) => {
   try {
-    let  {name} = req.params.name;
-    console.log(name);
+    console.log(req.body);
+    let  {name} = req.body;
+    console.log();
     const sectors = await prisma.sectors.create({
       data: {
-        name: req.body.name,
+        name: name,
         created_by:req.authUser.id,
         created_at:new Date()
 

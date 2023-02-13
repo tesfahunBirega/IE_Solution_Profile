@@ -6,8 +6,9 @@ const prisma = new PrismaClient();
 
 const createDepartment = asyncHandler(async (req, res) => {
   try {
+    console.log("object");
     let { name,description } = req.body;
-
+console.log(req.body);
     const department = await prisma.department.create({
       data: {
         name:name,

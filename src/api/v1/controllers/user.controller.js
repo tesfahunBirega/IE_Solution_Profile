@@ -1,8 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require("@prisma/client");
 const { request } = require("express");
-const bcrypt = require("bcryptjs");
 // const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 // const registerRoute = require("../routes/registers.routes");
 const prisma = new PrismaClient();
 
@@ -14,7 +14,13 @@ const SECRET = "SECRETFORTOKEN"
 
 const createUser = asyncHandler(async (req, res) => {
   try {
-    const password1 = 12345678
+    const password1 = "12345678"
+    console.log(password1);
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(password1, 10)
+    console.log(hash);
+     const isMatch = await bcrypt.compare(password1,hash)
+ console.log(isMatch);
     let {email, password, firstName, lastName, gender, department, tel,} = req.body;
     console.log(password);
 /**@check if User Email exists*/
@@ -33,8 +39,7 @@ console.log(isExist);
     message:"User already exist"
   })
     }else{
-      const salt = await bcrypt.genSalt(10)
-const hash = await bcrypt.hash(password, salt)
+     
     const user = await prisma.users.create({
       data: {
         firstName:firstName,
@@ -48,8 +53,7 @@ const hash = await bcrypt.hash(password, salt)
         created_at:new Date()
       },
     });
-const isMatch =  bcrypt.compare(hash,password1)
-console.log(isMatch);
+
 console.log(user);
     if (user) {
       return res.status(201).json({
@@ -102,7 +106,10 @@ const login = asyncHandler(async (req, res) => {
       },
     });
   console.log(user)
-
+  const isMatch = await bcrypt.compare(password,user.password)
+  console.log(isMatch);
+  console.log(user.password);
+  console.log(password);
 
 //   const isMatch =  bcrypt.compare(password, user.password)
 //   isMatch.then((value)=>{
@@ -114,7 +121,7 @@ const login = asyncHandler(async (req, res) => {
 //   })
 
     /**@check if user exists*/
-    if (!user) {
+    if (!user& isMatch) {
       res.status(404).json({
         success: false,
         message: "User not found.",
