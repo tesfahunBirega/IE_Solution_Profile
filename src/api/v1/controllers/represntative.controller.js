@@ -7,39 +7,70 @@ const prisma = new PrismaClient();
 const createRepresentative = asyncHandler(async (req, res) => {
   try {
     let { name, email, position, contact_1, contact_2, vendor_id, client_id, address } = req.body;
-console.log(name);
-    const representative = await prisma.representative_info.create({
-      data: {
-        name: name,
-        email:email,
-        position:position,
-        address:address,
-        contact_1:contact_1,
-        contact_2:contact_2,
-        client_id:client_id,
-        vendor_id:vendor_id,
-        created_by:req.authUser.id,
-        created_at:new Date()
+console.log(req.body);
+// console.log(client_id.lenght);
+if(vendor_id !==""){
+  const representative = await prisma.representative_info.create({
+    data: {
+      name: name,
+      email:email,
+      position:position,
+      address:address,
+      contact_1:contact_1,
+      contact_2:contact_2,
+     //client_id:client_id,
+      vendor_id:vendor_id,
+      created_by:req.authUser.id,
+      created_at:new Date()
 
-      },
-    });
+    },
+  });
 console.log(representative);
-    if (representative) {
-      return res.status(201).json({
-        success: true,
-        status: 201,
-        message: "representative created successfully!!!",
-        data: representative,
-      });
-    }
-  } catch (error) {
-    res.status(400).json({
-      error: error,
-      message: error.code,
+  if (representative) {
+    return res.status(201).json({
+      success: true,
+      status: 201,
+      message: "representative created successfully!!!",
+      data: representative,
     });
   }
-});
+} 
+if(client_id !==""){
+  const representative = await prisma.representative_info.create({
+    data: {
+      name: name,
+      email:email,
+      position:position,
+      address:address,
+      contact_1:contact_1,
+      contact_2:contact_2,
+      client_id:client_id,
+      //vendor_id:vendor_id,
+      created_by:req.authUser.id,
+      created_at:new Date()
 
+    },
+  });
+console.log(representative);
+  if (representative) {
+    return res.status(201).json({
+      success: true,
+      status: 201,
+      message: "representative created successfully!!!",
+      data: representative,
+    });
+  }
+} 
+}
+
+catch (error) {
+  res.status(400).json({
+    error: error,
+    message: error.code,
+  });
+}
+});
+ 
 const allRepresentatives = asyncHandler(async (req, res) => {
     try {
       const representative = await prisma.representative_info.findMany({
@@ -47,6 +78,7 @@ const allRepresentatives = asyncHandler(async (req, res) => {
           id:true,
           name:true,
           email:true,
+          address:true,
           contact_1:true,
           contact_2:true,
           position:true,
