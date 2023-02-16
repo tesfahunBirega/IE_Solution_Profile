@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const createProject = asyncHandler(async (req, res) => {
   try {
     let { name, description, vendor_id, client_id, solution_id,representative_id,sector_id } = req.body;
-
+console.log(req.body);
     solutionss = []
     solution_id.map((id) => {
       let obj = {
@@ -17,17 +17,17 @@ const createProject = asyncHandler(async (req, res) => {
       }
       solutionss.push(obj)
     })
-    // console.log(typeof(solutions))
+    console.log(typeof(solutions))
 
-    representative_infos = []
+    // representative_infos = []
 
-    representative_id.map((id) => {
-      let obj = {
-        "id": id 
-      }
-      representative_infos.push(obj)
-    })
-    // console.log(typeof(representative_info))
+    // representative_id.map((id) => {
+    //   let obj = {
+    //     "id": id 
+    //   }
+    //   representative_infos.push(obj)
+    // })
+    console.log(typeof(representative_info))
 
     vendorss = []
 
@@ -37,27 +37,25 @@ const createProject = asyncHandler(async (req, res) => {
       }
       vendorss.push(obj)
     })
-    // console.log(typeof(vendors))
+    console.log(typeof(vendors))
     const project = await prisma.project.create({
       data: {
         name: name,
         description: description,
-        // client_id:client,
+        client_id: Number(client_id),
+        sector_id: Number(sector_id),
         created_by:req.authUser.id,
-        client_id: client_id,
-        sector_id:sector_id,
-        created_by:req.authUser.id,
-          created_at:new Date(),
-        // representative_id: representative_id,
+        created_at:new Date(),
+        representative_id: Number(representative_id),
         solutions:{
           connect: solutionss
         },
         vendors:{
           connect: vendorss
         },
-        representative_info:{
-          connect: representative_infos
-        },
+        // representative_info:{
+        //   connect: representative_infos
+        // },
         // connect:{project_solution:{solution_id: solution.id, project_id: project.id}}
     
         // project_solution: [{
@@ -68,7 +66,7 @@ const createProject = asyncHandler(async (req, res) => {
 
       }
   })
-  console.log(project)
+  console.log(typeof(client_id));
   if (project) {
       return res.status(201).json({
         success: true,

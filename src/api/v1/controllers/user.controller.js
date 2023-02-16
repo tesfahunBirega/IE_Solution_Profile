@@ -14,13 +14,9 @@ const SECRET = "SECRETFORTOKEN"
 
 const createUser = asyncHandler(async (req, res) => {
   try {
-    const password1 = "12345678"
-    console.log(password1);
     const salt = await bcrypt.genSalt(10)
     const hash = await bcrypt.hash(password1, 10)
-    console.log(hash);
-     const isMatch = await bcrypt.compare(password1,hash)
- console.log(isMatch);
+//    
     let {email, password, firstName, lastName, gender, department, tel,} = req.body;
     console.log(password);
 /**@check if User Email exists*/
@@ -94,6 +90,7 @@ const allUsers = asyncHandler(async (req, res) => {
     });
   }
 });
+
 const login = asyncHandler(async (req, res) => {
   let { email, password } = req.body;
   // console.log(email)
