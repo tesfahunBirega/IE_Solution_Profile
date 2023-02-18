@@ -6,15 +6,15 @@ const prisma = new PrismaClient();
 
 const createClient = asyncHandler(async (req, res) => {
   try {
-    let { name, email, contact_phone, website,address,city } = req.body;
+    let { name, email, contact_phone, website,address,logo, } = req.body;
 // console.log(name);
 // console.log(email);
 
+      // console.log(name,email,contact_phone,website,address);
       const client = await prisma.clients.create({
         data: {
           name: name,
           addresss:address,
-          city:city,
           logo: req.file.filename,
           website: website,
           email: email,
@@ -75,6 +75,12 @@ const allClients = asyncHandler(async (req, res) => {
     // from clients
     // left join representative_info
     // ON representative_info.client_id = clients.id `
+    if(client?.is_deleted === true){
+      res.status(409).json({
+        success:false,
+        message: "client Not Found"
+      })
+    }
     if (client) {
       return res.status(201).json({
         success: true,

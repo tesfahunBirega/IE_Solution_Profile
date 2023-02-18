@@ -89,6 +89,12 @@ const allRepresentatives = asyncHandler(async (req, res) => {
             is_deleted:false
         }
       });
+      if(representative?.is_deleted === true){
+        res.status(409).json({
+          success:false,
+          message: "representative Not Found"
+        })
+      }
       // console.log(representative);
       if (representative) {
         return res.status(201).json({

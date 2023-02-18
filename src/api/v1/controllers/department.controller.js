@@ -6,15 +6,14 @@ const prisma = new PrismaClient();
 
 const createDepartment = asyncHandler(async (req, res) => {
   try {
-    console.log("object");
+    console.log(req.body);
     let { name,description } = req.body;
-console.log(req.body);
+
     const department = await prisma.department.create({
       data: {
         name:name,
         description:description,
         logo:req.file.filename,
-        // updated_by:updated_by,
         created_by:req.authUser.id,
         created_at:new Date()
 
@@ -46,6 +45,12 @@ const allDepartment = asyncHandler(async (req, res) => {
       is_deleted: false
         }
       });
+      if(department?.is_deleted === true){
+        res.status(409).json({
+          success:false,
+          message: "department Not Found"
+        })
+      }
       if (department) {
         return res.status(201).json({
           success: true,

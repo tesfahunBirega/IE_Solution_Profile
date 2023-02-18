@@ -59,6 +59,12 @@ const allSector = asyncHandler(async (req, res) => {
             is_deleted:false
         }
       });
+      if(sectors?.is_deleted === true){
+        res.status(409).json({
+          success:false,
+          message: "sectors Not Found"
+        })
+      }
       // console.log(representative);
       if (sectors) {
         return res.status(201).json({
@@ -111,28 +117,30 @@ const oneSector = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
       let { name} = req.body;
+      console.log(name,"Sector name");
       const sectors = await prisma.sectors.update({
         where: {
           id: Number(id),
         },
         data: {
-          name: name,
-          updated_by:req.authUser.id,
-          updated_at:new Date()
+          name:name,
+          // updated_by:req.authUser.id,
+          // updated_at:new Date()
 
         },
       });
+      console.log(sectors);
       if(sectors?.is_deleted === true){
         res.status(409).json({
           success:false,
           message: "sector Not Found"
         })
-      if (representative) {
+      if (sectors) {
         return res.status(201).json({
           success: true,
           status: 201,
           message: "sector updated successfully!!!",
-          data: representative,
+          data: sectors,
         });
       }}
     } catch (error) {

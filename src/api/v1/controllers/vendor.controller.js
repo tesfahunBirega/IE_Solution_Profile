@@ -49,6 +49,12 @@ const allVendors = asyncHandler(async (req, res) => {
           is_deleted: false
         }
       });
+      if(vendor?.is_deleted === true){
+        res.status(409).json({
+          success:false,
+          message: "vendor Not Found"
+        })
+      }
       if (vendor) {
         return res.status(201).json({
           success: true,

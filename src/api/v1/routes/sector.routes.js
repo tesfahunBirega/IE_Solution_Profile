@@ -28,6 +28,6 @@ const {
 sectorRoute.post("/create",authMiddleware,createSector);
 sectorRoute.get("/", allSector);
 sectorRoute.get("/:id", oneSector);
-sectorRoute.patch("/:id",authMiddleware,updateSector);
+sectorRoute.patch("/:id",updateSector);
 sectorRoute.delete("/:id",authMiddleware,deleteSector);
 module.exports = sectorRoute;

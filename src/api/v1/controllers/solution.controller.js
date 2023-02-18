@@ -56,6 +56,12 @@ const allSolutions = asyncHandler(async (req, res) => {
           is_deleted: false
         }
     });
+    if(solution?.is_deleted === true){
+      res.status(409).json({
+        success:false,
+        message: "solution Not Found"
+      })
+    }
       if (solution) {
         return res.status(201).json({
           success: true,

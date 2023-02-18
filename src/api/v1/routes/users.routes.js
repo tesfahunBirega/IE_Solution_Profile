@@ -18,7 +18,7 @@ const {
 const { authMiddleware } = require("../middleware/authMiddleware")
 
 const { updateUserValidator,createUserValidation } = require("../validators/userValidetor");
-userRoute.post("/create",authMiddleware,createUserValidation,validationMiddleware,createUser);
+userRoute.post("/create",createUserValidation,validationMiddleware,createUser);
 userRoute.post("/login", login);
 
 

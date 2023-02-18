@@ -13,13 +13,14 @@ const createPartner = asyncHandler(async(req, res) => {
 console.log("req.body below");
         const partners = await prisma.partner.create({
             data: {
-              name:name,
-              partner:req.file.filename,
-              created_by:req.authUser.id,
-          created_at:new Date()
+            name:name,
+            partner:req.file.filename,
+            created_by:req.authUser.id,
+            created_at:new Date()
 
             }
         });
+        console.log(partners);
         if(partners){
             return res.status(201).json({
                 success:true,
@@ -49,7 +50,12 @@ const allPartner = asyncHandler(async (req, res) => {
       is_deleted:false
       }
     });
-
+    if(partner?.is_deleted === true){
+      res.status(409).json({
+        success:false,
+        message: "department Not Found"
+      })
+    }
     if(partner){
         return res.status(201).json({
             success:true,

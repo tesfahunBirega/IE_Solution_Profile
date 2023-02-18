@@ -44,12 +44,19 @@ const allCerteficate = asyncHandler(async (req, res) => {
     const certeficate = await prisma.certficate.findMany({
       select:{
         id:true,
+        name:true,
         certeficate:true
       },
 where:{
   is_deleted:false
 }
     });
+    if(certeficate?.is_deleted === true){
+      res.status(409).json({
+        success:false,
+        message: "certeficate Not Found"
+      })
+    }
     if(certeficate){
         return res.status(201).json({
             success:true,

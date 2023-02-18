@@ -127,7 +127,19 @@ const allProjects = asyncHandler(async (req, res) => {
     //       message:"Project Not Found"
     //      })
     // }
+    if(project?.is_deleted === true){
+      res.status(409).json({
+        success:false,
+        message: "department Not Found"
+      })
+    }
     console.log(project,"project data");
+    if(project?.is_deleted === true){
+      res.status(409).json({
+        success:false,
+        message: "project Not Found"
+      })
+    }
     if (project) {
       return res.status(201).json({
         success: true,
