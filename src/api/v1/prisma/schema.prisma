@@ -9,19 +9,19 @@ datasource db {
 
 model clients {
   id                  Int                   @id @default(autoincrement())
-  name                String?               @db.VarChar(30)
-  logo                String?               @db.VarChar(60)
-  website             String?               @db.VarChar(30)
-  email               String?               @db.VarChar(30)
-  contact_no          String?               @db.VarChar(30)
-  city                String?               @db.VarChar(30)
+  name                String?               @db.VarChar(100)
+  logo                String?               @db.VarChar(100)
+  website             String?               @db.VarChar(100)
+  email               String?               @db.VarChar(100)
+  contact_no          String?               @db.VarChar(100)
+  city                String?               @db.VarChar(100)
   created_by          Int?
   updated_by          Int?
   created_at          DateTime?             @db.Timestamp(0)
   updated_at          DateTime?             @db.Timestamp(0)
   is_deleted          Boolean?              @default(false)
   address_id          Int?
-  addresss            String?               @db.VarChar(30)
+  addresss            String?               @db.VarChar(100)
   create              users?                @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_clients_user")
   update              users?                @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_clients_user1")
   project             project[]
@@ -87,9 +87,9 @@ model project {
 model representative_info {
   id               Int       @id @default(autoincrement())
   name             String?   @db.VarChar(45)
-  email            String?   @unique(map: "email") @db.VarChar(45)
-  contact_1        String?   @unique(map: "contact_1") @db.VarChar(45)
-  contact_2        String?   @unique(map: "contact_2") @db.VarChar(30)
+  email            String?   @unique(map: "email") @db.VarChar(100)
+  contact_1        String?   @unique(map: "contact_1") @db.VarChar(100)
+  contact_2        String?   @unique(map: "contact_2") @db.VarChar(100)
   position         String?
   created_by       Int?
   updated_by       Int?
@@ -100,7 +100,7 @@ model representative_info {
   updated_at       DateTime? @db.Timestamp(0)
   is_deleted       Boolean?  @default(false)
   address_id       Int?
-  address          String?   @db.VarChar(45)
+  address          String?   @db.VarChar(100)
   clients          clients?  @relation(fields: [client_id], references: [id], onDelete: Cascade, map: "Fk_client_representatives")
   create           users?    @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_representatives_user")
   update           users?    @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_representatives_user1")
@@ -117,8 +117,8 @@ model representative_info {
 model solutions {
   id            Int          @id @default(autoincrement())
   name          String?      @db.Text
-  logo          String?      @db.VarChar(40)
-  email         String?      @unique(map: "email") @db.VarChar(40)
+  logo          String?      @db.VarChar(100)
+  email         String?      @unique(map: "email") @db.VarChar(100)
   contact_no    String?      @db.VarChar(40)
   created_by    Int?
   updated_by    Int?
@@ -141,16 +141,16 @@ model users {
   email                                     String?               @unique @db.VarChar(100)
   password                                  String?               @db.VarChar(200)
   isAdmin                                   Boolean?
-  created_at                                String?               @db.VarChar(20)
-  updated_at                                String?               @db.VarChar(20)
+  created_at                                String?               @db.VarChar(100)
+  updated_at                                String?               @db.VarChar(100)
   created_by                                Int?
   updated_by                                Int?
-  department                                String?               @db.VarChar(20)
-  firstName                                 String?               @db.VarChar(30)
-  gender                                    String?               @db.VarChar(20)
+  department                                String?               @db.VarChar(100)
+  firstName                                 String?               @db.VarChar(600)
+  gender                                    String?               @db.VarChar(100)
   is_deleted                                Boolean?              @default(false)
-  lastName                                  String?               @db.VarChar(30)
-  tel                                       String?               @db.VarChar(20)
+  lastName                                  String?               @db.VarChar(60)
+  tel                                       String?               @db.VarChar(100)
   created_client                            clients[]             @relation("create")
   updated_client                            clients[]             @relation("update")
   projectfill_projectfill_created_byTousers department[]          @relation("projectfill_created_byTousers")
@@ -180,16 +180,16 @@ model vendors {
   id                  Int                   @id @default(autoincrement())
   name                String?               @db.Text
   logo                String?               @db.VarChar(45)
-  website             String?               @unique(map: "website") @db.VarChar(45)
-  email               String?               @unique(map: "email") @db.VarChar(30)
-  contact_phone       String?               @unique(map: "contact_phone") @db.VarChar(30)
+  website             String?               @unique(map: "website") @db.VarChar(100)
+  email               String?               @unique(map: "email") @db.VarChar(100)
+  contact_phone       String?               @unique(map: "contact_phone") @db.VarChar(100)
   created_at          DateTime?             @db.Timestamp(0)
   update_at           DateTime?             @db.Timestamp(0)
   created_by          Int?
   updated_by          Int?
   is_deleted          Boolean?              @default(false)
   address_id          Int?
-  address             String?               @db.VarChar(45)
+  address             String?               @db.VarChar(100)
   create              users?                @relation("create", fields: [created_by], references: [id], onDelete: Cascade, map: "Fk_vendors_user")
   update              users?                @relation("update", fields: [updated_by], references: [id], onDelete: Cascade, map: "Fk_vendors_user1")
   representative_info representative_info[]
@@ -204,7 +204,7 @@ model department {
   id                                  Int         @id @default(autoincrement())
   name                                String?     @db.Text
   description                         String?     @db.Text
-  logo                                String?     @db.VarChar(30)
+  logo                                String?     @db.VarChar(100)
   created_by                          Int?
   updated_by                          Int?
   created_at                          DateTime?   @db.Timestamp(0)

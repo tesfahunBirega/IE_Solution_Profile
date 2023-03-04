@@ -20,7 +20,7 @@ const createSolution = asyncHandler(async (req, res) => {
     const solution = await prisma.solutions.create({
       data: {
         name: name,
-        description: description,
+        description:description,
         department_id:department,
         logo:req.file.filename,
         // email:email,
@@ -112,7 +112,7 @@ const oneSolution = asyncHandler(async (req, res) => {
   const updateSolution = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      let { name, description } = req.body;
+      let { name, description,department } = req.body;
       console.log(name,description);
       const solution = await prisma.solutions.update({
         where: {
@@ -121,6 +121,7 @@ const oneSolution = asyncHandler(async (req, res) => {
         data: {
           name: name,
           description: description,
+          department:department,
           logo:req.file.filename,
           updated_by:req.authUser.id,
           updated_at:new Date()
